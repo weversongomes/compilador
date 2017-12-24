@@ -41,11 +41,14 @@ public class VariableParser {
 	}
 	
 	// reconhece a a estrutura sintatica de inicializacao de uma variavel global, atributo ou local
-	public boolean recognizeInitialization() { 
+	public boolean recognizeInitialization(boolean isConstant) { 
 		if (parser.getTokensList().get(parser.index).type.equals("ID")) {
 			parser.index = parser.index + 1;
 			if (parser.tokensToRead() && parser.getTokensList().get(parser.index).lexeme.equals("=")) {
 				parser.index = parser.index + 1;
+				if (isConstant) {
+					System.out.println("VALOR GLOBAL - " + parser.getTokensList().get(parser.index).lexeme);
+				}
 				if (parser.tokensToRead() && parser.getTokensList().get(parser.index).type.equals("ID") || parser.getTokensList().get(parser.index).type.equals("NUM") || parser.getTokensList().get(parser.index).type.equals("STR") || 
 						parser.getTokensList().get(parser.index).lexeme.equals("true") || parser.getTokensList().get(parser.index).lexeme.equals("false")) {
 					return true;

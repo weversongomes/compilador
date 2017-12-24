@@ -29,7 +29,7 @@ public class ClassParser {
 			fileParser.index = fileParser.index + 1;
 			if (fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index).lexeme.equals("=") && isVector == false && isFinal == false) { // inicializacao de atributo
 				fileParser.index = fileParser.index - 1; // para comecar a varredura de inicializacao de variavel pelo id
-				if (!new VariableParser(fileParser).recognizeInitialization()) { // verifica se a atribuicao esta correta
+				if (!new VariableParser(fileParser).recognizeInitialization(false)) { // verifica se a atribuicao esta correta
 					panicModeAttributeInitialization();
 				} else {
 					fileParser.index = fileParser.index + 1;

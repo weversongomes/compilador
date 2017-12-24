@@ -52,7 +52,7 @@ public class CommandParser {
 			parser.index = parser.index + 1;
 			if (parser.tokensToRead() && parser.getTokensList().get(parser.index).lexeme.equals("=")) { // inicializacao de variavel local
 				parser.index = parser.index - 1; // para comecar a varredura de inicializacao de variavel pelo id
-				if (!new VariableParser(parser).recognizeInitialization()) { // verifica se a atribuicao esta correta
+				if (!new VariableParser(parser).recognizeInitialization(false)) { // verifica se a atribuicao esta correta
 					panicModeLocalVariableInitialization();
 				} else {
 					parser.index = parser.index + 1;
@@ -124,7 +124,7 @@ public class CommandParser {
 		while (forIndex < forStructure.length) {
 			if (parser.tokensToRead()) {
 				if (forIndex == 2) { // verifica se a inicializacao do for esta correta
-					if (!new VariableParser(parser).recognizeInitialization()) {
+					if (!new VariableParser(parser).recognizeInitialization(false)) {
 						isCorrect = false;
 					}
 					forIndex++;

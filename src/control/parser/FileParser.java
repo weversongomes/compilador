@@ -37,10 +37,10 @@ public class FileParser {
 				if (tokensList.get(index).lexeme.equals("final")) { // pode ser constante
 					index++;
 					if (tokensToRead() &&  (isAttributeType() || tokensList.get(index).type.equals("ID"))) {
-						recognizeGlobalVariable();
+						recognizeGlobalVariable(true);
 					}
 				} else if (isAttributeType() || tokensList.get(index).type.equals("ID")) {
-					recognizeGlobalVariable();
+					recognizeGlobalVariable(false);
 				} else {
 					// Comando nao reconhecido
 				}
@@ -103,12 +103,12 @@ public class FileParser {
 	}
 	
 	// reconhece a estrutura sintatica de uma variavel global
-	public boolean recognizeGlobalVariable() {
+	public boolean recognizeGlobalVariable(boolean isConstant) {
 		if (isAttributeType() || tokensList.get(index).type.equals("ID")) {
 			index++;
 			if (tokensToRead() && tokensList.get(index).lexeme.equals("=")) { // inicializacao de variavel global
 				index--; // para comecar a varredura de inicializacao de variavel pelo id
-				if (!new VariableParser(this).recognizeInitialization()) { // verifica se a atribuicao esta correta
+				if (!new VariableParser(this).recognizeInitialization(false)) { // verifica se a atribuicao esta correta
 					panicModeGlobalVariableInitialization();
 				} else {
 					index++;
@@ -132,10 +132,20 @@ public class FileParser {
 					index++;
 				}
 				if (tokensToRead() && tokensList.get(index).type.equals("ID")) {
+					System.out.println("GLOBAL NOME - " + tokensList.get(index).lexeme);
 					index++;
-					if (tokensToRead() && (tokensList.get(index).lexeme.equals(";") || tokensList.get(index).lexeme.equals(","))) {
+					/*if (tokensToRead() && (tokensList.get(index).lexeme.equals(";") || tokensList.get(index).lexeme.equals(","))) {
 						index--; // para comecar a varredura da estrutura de declaracao de variavel a partir do id
 						if (!new VariableParser(this).recognizeVariableDeclaration()) {
+							panicModeGlobalVariableDeclaration();
+						} else {
+							System.out.println("Declaracao de variavel global correta na linha " + tokensList.get(index).line);
+							return true;
+						}
+					}*/ 
+					if (tokensToRead() && (tokensList.get(index).lexeme.equals("="))) {
+						index--; // para comecar a varredura da estrutura de declaracao de variavel a partir do id
+						if (!new VariableParser(this).recognizeInitialization(true)) {
 							panicModeGlobalVariableDeclaration();
 						} else {
 							System.out.println("Declaracao de variavel global correta na linha " + tokensList.get(index).line);
