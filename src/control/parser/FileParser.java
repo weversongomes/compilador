@@ -132,7 +132,7 @@ public class FileParser {
 					index++;
 				}
 				if (tokensToRead() && tokensList.get(index).type.equals("ID")) {
-					System.out.println("GLOBAL NOME - " + tokensList.get(index).lexeme);
+					String simbol = tokensList.get(index).lexeme;
 					index++;
 					/*if (tokensToRead() && (tokensList.get(index).lexeme.equals(";") || tokensList.get(index).lexeme.equals(","))) {
 						index--; // para comecar a varredura da estrutura de declaracao de variavel a partir do id
@@ -142,7 +142,7 @@ public class FileParser {
 							System.out.println("Declaracao de variavel global correta na linha " + tokensList.get(index).line);
 							return true;
 						}
-					}*/ 
+					}*/
 					if (tokensToRead() && (tokensList.get(index).lexeme.equals("="))) {
 						index--; // para comecar a varredura da estrutura de declaracao de variavel a partir do id
 						if (!new VariableParser(this).recognizeInitialization(true)) {
