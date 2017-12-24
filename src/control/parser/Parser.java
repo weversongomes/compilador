@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import model.EscopoGlobal;
 import model.Token;
 
 public class Parser {

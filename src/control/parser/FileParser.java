@@ -2,6 +2,7 @@ package control.parser;
 
 import java.util.ArrayList;
 
+import model.EscopoGlobal;
 import model.Token;
 
 /**
@@ -15,10 +16,12 @@ public class FileParser {
 	private ArrayList<Token> tokensList; // lista de tokens recebida do lexico
 	private ArrayList<String> errorsList; // lista de erros sintaticos
 	private String[] classStructure = {"class", "<name>", "{", "<content>", "}"}; // estrutura sintatica de uma classe
+	EscopoGlobal eg;
 	
 	public FileParser(ArrayList<Token> tokensList) {
 		this.tokensList = tokensList;
 		errorsList = new ArrayList<String>();
+		eg = new EscopoGlobal();
 	}
 	
 	// metodo inicial que chama o reconhecimento de classes e variaveis globais
