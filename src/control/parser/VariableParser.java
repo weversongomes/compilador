@@ -51,8 +51,7 @@ public class VariableParser {
 				if (isConstant) {
 					String simbolValue = fileParser.getTokensList().get(fileParser.index).lexeme;
 					fileParser.eg.setSimbolValue(simbol, simbolValue);
-					System.out.println("CONST GLOBAL - " + simbol);
-					System.out.println("VALOR GLOBAL - " + simbolValue);
+					fileParser.eg.showSimbols();
 				}
 				if (fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index).type.equals("ID") || fileParser.getTokensList().get(fileParser.index).type.equals("NUM") || fileParser.getTokensList().get(fileParser.index).type.equals("STR") || 
 						fileParser.getTokensList().get(fileParser.index).lexeme.equals("true") || fileParser.getTokensList().get(fileParser.index).lexeme.equals("false")) {
