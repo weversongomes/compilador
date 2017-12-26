@@ -1,5 +1,6 @@
 package control.parser;
 
+import model.Escopo;
 import model.Simbol;
 
 /**
@@ -16,11 +17,15 @@ public class VariableParser {
 	}
 	
 	// reconhece a estrutura sintatica de declaracao de uma variavel global, atributo ou local
-	public boolean recognizeVariableDeclaration() {
+	public boolean recognizeVariableDeclaration(String varType, Escopo escopo) {
 		boolean isFirstVariable = true;
 		while (fileParser.tokensToRead() && !fileParser.getTokensList().get(fileParser.index).lexeme.equals(";")) {
 			if (isFirstVariable) { // se for a primeira variavel, nao tem virgula antes
 				if (fileParser.getTokensList().get(fileParser.index).type.equals("ID")) { // verifica se o nome da variavel eh valido
+					Simbol simbol = new Simbol();
+					simbol.name = fileParser.getTokensList().get(fileParser.index).lexeme;
+					simbol.type = varType;
+					escopo.addSimbol(simbol);
 					fileParser.index = fileParser.index + 1;
 					isFirstVariable = false;
 				} else {
@@ -33,6 +38,10 @@ public class VariableParser {
 					return false;
 				}
 				if (fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index).type.equals("ID")) { // verifica se o nome da variavel eh valido
+					Simbol simbol = new Simbol();
+					simbol.name = fileParser.getTokensList().get(fileParser.index).lexeme;
+					simbol.type = varType;
+					escopo.addSimbol(simbol);
 					fileParser.index = fileParser.index + 1;
 				} else {
 					return false;

@@ -1,5 +1,9 @@
 package control.parser;
 
+import model.EscopoClasse;
+import model.EscopoMetodo;
+import model.Simbol;
+
 /**
  * 
  * Classe responsavel por reconhecer metodos, incluindo o metodo main
@@ -11,27 +15,36 @@ public class MethodParser {
 	private String[] mainStructure = {"bool", "main", "(", ")", "{", "<commands>", "<return>", "}"};
 	private String[] methodStructure = {"<return_type>", "<name>", "(", "<parameters>", ")", "{", "<commands>", "<return>", "}"};
 	private String[] methodReturnStructure = {"<", ":", "<return>", ":", ">"};
+	EscopoClasse escopoPai;
+	public EscopoMetodo em;
 	
-	public MethodParser(FileParser parser) {
+	public MethodParser(FileParser parser, EscopoClasse escopo) {
 		this.parser = parser;
+		this.escopoPai = escopo;
+		em = new EscopoMetodo();
+		em.escopoPai = escopoPai;
 	}
 	
 	// reconhece a estrutura sintatica de um metodo
 	public boolean recognizeMethod() {
 		boolean isCorrect = true;
 		int methodIndex = 0;
+		Simbol simbol = new Simbol();
 		while (methodIndex < methodStructure.length) {
 			if (parser.tokensToRead()) {
 				if (methodIndex == 0) { // verifica se o retorno do metodo esta correto
 					if (!(parser.isAttributeType() || parser.getTokensList().get(parser.index).type.equals("ID"))) {
 						isCorrect = false;
 					}
+					simbol.type = "metodo";
+					escopoPai.addSimbol(simbol);
 					methodIndex++;
 					parser.index = parser.index + 1;
 				} else if (methodIndex == 1) { // verifica se o nome do metodo eh valido
 					if (!parser.getTokensList().get(parser.index).type.equals("ID")) {
 						isCorrect = false;
 					}
+					simbol.name = parser.getTokensList().get(parser.index).lexeme;
 					methodIndex++;
 					parser.index = parser.index + 1;
 				} else if (methodIndex == 3) { // verifica se os parametros do metodo estao corretos
@@ -44,7 +57,7 @@ public class MethodParser {
 					if (parser.getTokensList().get(parser.index).lexeme.equals("<")) { // se for um um "<" eh porque nao ha nenhum comando dentro do metodo, apenas o retorno
 						methodIndex++;
 					} else {
-						while (parser.tokensToRead() && new CommandParser(parser).recognizeCommand()) { // enquanto houver comandos validos dentro do metodo
+						while (parser.tokensToRead() && new CommandParser(parser, em).recognizeCommand()) { // enquanto houver comandos validos dentro do metodo
 							parser.index = parser.index + 1;							
 						}
 						if (!parser.getTokensList().get(parser.index).lexeme.equals("<")) { // nao ha mais comandos dentro do metodo, achou o "<" do inicio do retorno
@@ -79,13 +92,17 @@ public class MethodParser {
 	public boolean recognizeMethodParameters() {
 		boolean isFirstParameter = true;
 		while (parser.tokensToRead() && !parser.getTokensList().get(parser.index).lexeme.equals(")")) {
+			Simbol simbol = new Simbol();
 			if (isFirstParameter) { // se for o primeiro parametro, nao tem virgula antes
 				if (parser.isAttributeType() || parser.getTokensList().get(parser.index).type.equals("ID")) { // verifica se o tipo do parametro esta correto
+					simbol.type = parser.getTokensList().get(parser.index).lexeme;
 					parser.index = parser.index + 1;
 				} else {
 					return false;
 				}
 				if (parser.tokensToRead() && parser.getTokensList().get(parser.index).type.equals("ID")) { // verifica se o nome do parametro eh valido
+					simbol.name = parser.getTokensList().get(parser.index).lexeme;
+					em.addSimbol(simbol);
 					parser.index = parser.index + 1;
 					isFirstParameter = false; // se tiver proximo parametro, nao sera mais o primeiro
 				} else {
@@ -98,11 +115,14 @@ public class MethodParser {
 					return false;
 				}
 				if (parser.tokensToRead() && (parser.isAttributeType() || parser.getTokensList().get(parser.index).type.equals("ID"))) { // verifica se o tipo do parametro esta correto
+					simbol.type = parser.getTokensList().get(parser.index).lexeme;
 					parser.index = parser.index + 1;
 				} else {
 					return false;
 				}
 				if (parser.tokensToRead() && (parser.getTokensList().get(parser.index).type.equals("ID"))) { // verifica se o nome do parametro eh valido
+					simbol.name = parser.getTokensList().get(parser.index).lexeme;
+					em.addSimbol(simbol);
 					parser.index = parser.index + 1;
 				} else {
 					return false;
@@ -161,7 +181,7 @@ public class MethodParser {
 					if (parser.getTokensList().get(parser.index).lexeme.equals("<")) { // se for um um "<" eh porque nao ha nenhum comando dentro da main, apenas o retorno
 						mainIndex++;
 					} else {
-						while (parser.tokensToRead() && new CommandParser(parser).recognizeCommand()) { // enquanto houver comandos validos dentro da main
+						while (parser.tokensToRead() && new CommandParser(parser, em).recognizeCommand()) { // enquanto houver comandos validos dentro da main
 							parser.index = parser.index + 1;							
 						}
 						if (!parser.getTokensList().get(parser.index).lexeme.equals("<")) { // nao ha mais comandos dentro da main, achou o "<" do inicio do retorno

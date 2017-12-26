@@ -56,7 +56,8 @@ public class ClassParser {
 				}
 				if (fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index).lexeme.equals("main") && isVector == false && isFinal == false) { // declaracao da main nao pode ter vetor nem final
 					fileParser.index = fileParser.index - 1;
-					if (!new MethodParser(fileParser).recognizeMain()) {
+					MethodParser mParser = new MethodParser(fileParser, ec);
+					if (!mParser.recognizeMain()) {
 						panicModeMethod();
 					} else {
 						System.out.println("Main correta na linha " + fileParser.getTokensList().get(fileParser.index).line);
@@ -66,15 +67,18 @@ public class ClassParser {
 					fileParser.index = fileParser.index + 1;
 					if (fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index).lexeme.equals("(") && isVector == false && isFinal == false) { // declaracao de metodo nao pode ter vetor nem final
 						fileParser.index = fileParser.index - 2; // para comecar a varredura da estrutura do metodo a partir do tipo de retorno
-						if (!new MethodParser(fileParser).recognizeMethod()) {
+						MethodParser mParser = new MethodParser(fileParser, ec);
+						if (!mParser.recognizeMethod()) {
 							panicModeMethod();
 						} else {
 							System.out.println("Metodo correto na linha " + fileParser.getTokensList().get(fileParser.index).line);
+							mParser.em.showSimbols();
 							return true;
 						}
 					} else if (fileParser.getTokensList().get(fileParser.index).lexeme.equals(";") || fileParser.getTokensList().get(fileParser.index).lexeme.equals(",")) { // declaracao de variavel
 						fileParser.index = fileParser.index - 1; // para comecar a varredura da estrutura de declaracao de variavel a partir do nome
-						if (!new VariableParser(fileParser).recognizeVariableDeclaration()) {
+						varType = fileParser.getTokensList().get(fileParser.index - 1).lexeme;
+						if (!new VariableParser(fileParser).recognizeVariableDeclaration(varType, ec)) {
 							panicModeAttributeDeclaration();
 						} else {
 							System.out.println("Declaracao de atributo correta na linha " + fileParser.getTokensList().get(fileParser.index).line);

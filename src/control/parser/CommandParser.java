@@ -1,5 +1,7 @@
 package control.parser;
 
+import model.EscopoMetodo;
+
 /**
  * 
  * Classe responsavel por reconhecer os comandos da gramatica, como if-else, for, print, scan e acesso
@@ -13,9 +15,11 @@ public class CommandParser {
 	private String[] elseStructure = {"else", "{", "<commands>", "}"};
 	private String[] printStructure = {"print", "(", "<content>", ")", ";"};
 	private String[] scanStructure = {"scan", "(", "<content>", ")", ";"};
+	EscopoMetodo escopo;
 	
-	public CommandParser(FileParser parser) {
+	public CommandParser(FileParser parser, EscopoMetodo escopo) {
 		this.parser = parser;
+		this.escopo = escopo;
 	}
 	
 	// reconhece a estrutura sintatica de um comando, tal como if-else, for, print, scan e acesso
@@ -100,10 +104,11 @@ public class CommandParser {
 					parser.index = parser.index + 1;
 				}
 				if (parser.tokensToRead() && parser.getTokensList().get(parser.index).type.equals("ID")) {
+					varType = parser.getTokensList().get(parser.index - 1).lexeme;
 					parser.index = parser.index + 1;
 					if (parser.tokensToRead() && (parser.getTokensList().get(parser.index).lexeme.equals(";") || parser.getTokensList().get(parser.index).lexeme.equals(","))) {
 						parser.index = parser.index - 1; // para comecar a varredura da estrutura de declaracao de variavel a partir do id
-						if (!new VariableParser(parser).recognizeVariableDeclaration()) {
+						if (!new VariableParser(parser).recognizeVariableDeclaration(varType, escopo)) {
 							panicModeLocalVariableDeclaration();
 						} else {
 							System.out.println("Declaracao de variavel local correta na linha " + parser.getTokensList().get(parser.index).line);
