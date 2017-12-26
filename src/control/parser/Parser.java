@@ -23,6 +23,7 @@ public class Parser {
 		System.out.println("---------- INICIO DA ANALISE SINTATICA ----------");
 		FileParser fp = new FileParser(tokensList);
 		fp.fileParsing();
+		fp.eg.showSimbols();
 		System.out.println("---------- FIM DA ANALISE SINTATICA ----------");
 		
 		File folder = new File(dir + "/results");

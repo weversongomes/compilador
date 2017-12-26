@@ -2,7 +2,10 @@ package control.parser;
 
 import java.util.ArrayList;
 
+import model.Escopo;
+import model.EscopoClasse;
 import model.EscopoGlobal;
+import model.Simbol;
 import model.Token;
 
 /**
@@ -16,12 +19,15 @@ public class FileParser {
 	private ArrayList<Token> tokensList; // lista de tokens recebida do lexico
 	private ArrayList<String> errorsList; // lista de erros sintaticos
 	private String[] classStructure = {"class", "<name>", "{", "<content>", "}"}; // estrutura sintatica de uma classe
+	private ArrayList<Escopo> escopos;
 	EscopoGlobal eg;
 	
 	public FileParser(ArrayList<Token> tokensList) {
 		this.tokensList = tokensList;
 		errorsList = new ArrayList<String>();
 		eg = new EscopoGlobal();
+		escopos = new ArrayList<>();
+		escopos.add(eg);
 	}
 	
 	// metodo inicial que chama o reconhecimento de classes e variaveis globais
@@ -58,6 +64,11 @@ public class FileParser {
 					if (!tokensList.get(index).type.equals("ID")) {
 						isCorrect = false;
 					}
+					Simbol simbol = new Simbol();
+					simbol.name = getTokensList().get(index).lexeme;
+					simbol.type = "class";
+					eg.addSimbol(simbol);
+					escopos.add(eg);
 					classIndex++;
 					index++;
 				} else if (classIndex == 2) {
@@ -104,11 +115,12 @@ public class FileParser {
 	
 	// reconhece a estrutura sintatica de uma variavel global
 	public boolean recognizeGlobalVariable(boolean isConstant) {
+		String varType = tokensList.get(index).lexeme;
 		if (isAttributeType() || tokensList.get(index).type.equals("ID")) {
 			index++;
 			if (tokensToRead() && tokensList.get(index).lexeme.equals("=")) { // inicializacao de variavel global
 				index--; // para comecar a varredura de inicializacao de variavel pelo id
-				if (!new VariableParser(this).recognizeInitialization(false)) { // verifica se a atribuicao esta correta
+				if (!new VariableParser(this).recognizeInitialization(false, varType)) { // verifica se a atribuicao esta correta
 					panicModeGlobalVariableInitialization();
 				} else {
 					index++;
@@ -145,7 +157,7 @@ public class FileParser {
 					}*/
 					if (tokensToRead() && (tokensList.get(index).lexeme.equals("="))) {
 						index--; // para comecar a varredura da estrutura de declaracao de variavel a partir do id
-						if (!new VariableParser(this).recognizeInitialization(true)) {
+						if (!new VariableParser(this).recognizeInitialization(true, varType)) {
 							panicModeGlobalVariableDeclaration();
 						} else {
 							System.out.println("Declaracao de variavel global correta na linha " + tokensList.get(index).line);

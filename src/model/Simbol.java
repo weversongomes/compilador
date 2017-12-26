@@ -1,7 +1,8 @@
 package model;
 
 public class Simbol {
-	String name, value, type;
+	public String name, value, type;
+	public boolean isConstant = false;
 	
 	public boolean equals(Object obj) {
 		Simbol simbol = (Simbol) obj;

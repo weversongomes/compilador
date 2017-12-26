@@ -1,5 +1,7 @@
 package control.parser;
 
+import model.Simbol;
+
 /**
  * 
  * Classe responsavel por reconhecer declaracao e inicializacao de variaveis
@@ -41,17 +43,20 @@ public class VariableParser {
 	}
 	
 	// reconhece a a estrutura sintatica de inicializacao de uma variavel global, atributo ou local
-	public boolean recognizeInitialization(boolean isConstant) {
+	public boolean recognizeInitialization(boolean isConstant, String varType) {
 		if (fileParser.getTokensList().get(fileParser.index).type.equals("ID")) {
-			String simbol = fileParser.getTokensList().get(fileParser.index).lexeme;
-			fileParser.eg.addSimbol(simbol);
+			String simbolName = fileParser.getTokensList().get(fileParser.index).lexeme;
 			fileParser.index = fileParser.index + 1;
 			if (fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index).lexeme.equals("=")) {
 				fileParser.index = fileParser.index + 1;
 				if (isConstant) {
+					Simbol simbol = new Simbol();
+					simbol.name = simbolName;
+					simbol.type = varType;
+					simbol.isConstant = true;
+					fileParser.eg.addSimbol(simbol);
 					String simbolValue = fileParser.getTokensList().get(fileParser.index).lexeme;
-					fileParser.eg.setSimbolValue(simbol, simbolValue);
-					fileParser.eg.showSimbols();
+					fileParser.eg.setSimbolValue(simbolName, simbolValue);
 				}
 				if (fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index).type.equals("ID") || fileParser.getTokensList().get(fileParser.index).type.equals("NUM") || fileParser.getTokensList().get(fileParser.index).type.equals("STR") || 
 						fileParser.getTokensList().get(fileParser.index).lexeme.equals("true") || fileParser.getTokensList().get(fileParser.index).lexeme.equals("false")) {

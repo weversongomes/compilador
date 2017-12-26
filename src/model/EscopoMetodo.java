@@ -1,5 +1,9 @@
 package model;
 
-public class EscopoMetodo {
-	String escopoPai;
+public class EscopoMetodo extends Escopo {
+	EscopoClasse escopoPai;
+	
+	public EscopoMetodo() {
+		type = "metodo";
+	}
 }
