@@ -85,7 +85,7 @@ public class ClassParser {
 					} else if (fileParser.getTokensList().get(fileParser.index).lexeme.equals(";") || fileParser.getTokensList().get(fileParser.index).lexeme.equals(",")) { // declaracao de variavel
 						fileParser.index = fileParser.index - 1; // para comecar a varredura da estrutura de declaracao de variavel a partir do nome
 						varType = fileParser.getTokensList().get(fileParser.index - 1).lexeme;
-						if (!new VariableParser(fileParser).recognizeVariableDeclaration(varType, ec)) {
+						if (!new VariableParser(fileParser).recognizeVariableDeclaration(varType, ec, isFinal)) {
 							panicModeAttributeDeclaration();
 						} else {
 							System.out.println("Declaracao de atributo correta na linha " + fileParser.getTokensList().get(fileParser.index).line);

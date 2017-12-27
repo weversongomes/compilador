@@ -108,7 +108,7 @@ public class CommandParser {
 					parser.index = parser.index + 1;
 					if (parser.tokensToRead() && (parser.getTokensList().get(parser.index).lexeme.equals(";") || parser.getTokensList().get(parser.index).lexeme.equals(","))) {
 						parser.index = parser.index - 1; // para comecar a varredura da estrutura de declaracao de variavel a partir do id
-						if (!new VariableParser(parser).recognizeVariableDeclaration(varType, escopo)) {
+						if (!new VariableParser(parser).recognizeVariableDeclaration(varType, escopo, false)) {
 							panicModeLocalVariableDeclaration();
 						} else {
 							System.out.println("Declaracao de variavel local correta na linha " + parser.getTokensList().get(parser.index).line);

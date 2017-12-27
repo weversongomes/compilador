@@ -17,7 +17,7 @@ public class VariableParser {
 	}
 	
 	// reconhece a estrutura sintatica de declaracao de uma variavel global, atributo ou local
-	public boolean recognizeVariableDeclaration(String varType, Escopo escopo) {
+	public boolean recognizeVariableDeclaration(String varType, Escopo escopo, boolean isConstant) {
 		boolean isFirstVariable = true;
 		while (fileParser.tokensToRead() && !fileParser.getTokensList().get(fileParser.index).lexeme.equals(";")) {
 			if (isFirstVariable) { // se for a primeira variavel, nao tem virgula antes
@@ -25,6 +25,7 @@ public class VariableParser {
 					Simbol simbol = new Simbol();
 					simbol.name = fileParser.getTokensList().get(fileParser.index).lexeme;
 					simbol.type = varType;
+					simbol.isConstant = isConstant;
 					escopo.addSimbol(simbol);
 					fileParser.index = fileParser.index + 1;
 					isFirstVariable = false;
@@ -41,6 +42,7 @@ public class VariableParser {
 					Simbol simbol = new Simbol();
 					simbol.name = fileParser.getTokensList().get(fileParser.index).lexeme;
 					simbol.type = varType;
+					simbol.isConstant = isConstant;
 					escopo.addSimbol(simbol);
 					fileParser.index = fileParser.index + 1;
 				} else {
