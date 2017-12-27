@@ -43,7 +43,7 @@ public class EscopoMetodo extends Escopo {
 	}
 	
 	public void showSimbols() {
-		System.out.println("PRINTING ALL SIMBOLS FROM ESCOPO METODO");
+		System.out.println("SIMBOLOS ESCOPO METODO");
 		for (Simbol s : simbols) {
 			System.out.println(s.name + " - " + s.value + " - " + s.type + " - " + s.isConstant);
 		}

@@ -19,7 +19,7 @@ public class FileParser {
 	private ArrayList<Token> tokensList; // lista de tokens recebida do lexico
 	private ArrayList<String> errorsList; // lista de erros sintaticos
 	private String[] classStructure = {"class", "<name>", "{", "<content>", "}"}; // estrutura sintatica de uma classe
-	private ArrayList<Escopo> escopos;
+	public ArrayList<Escopo> escopos;
 	EscopoGlobal eg;
 	
 	public FileParser(ArrayList<Token> tokensList) {
@@ -68,7 +68,6 @@ public class FileParser {
 					simbol.name = getTokensList().get(index).lexeme;
 					simbol.type = "class";
 					eg.addSimbol(simbol);
-					escopos.add(eg);
 					classIndex++;
 					index++;
 				} else if (classIndex == 2) {
@@ -85,10 +84,13 @@ public class FileParser {
 					}
 					index++;
 				} else if (classIndex == 3) { // verifica se os comandos estao corretos
+					System.out.println("eitchaaaaaaaaaam");
+					EscopoClasse ec = new EscopoClasse();
+					escopos.add(ec);
 					if (tokensList.get(index).lexeme.equals("}")) { // se for um um "}" eh porque nao ha nenhum comando dentro da classe
 						classIndex++;
 					} else {
-						while (tokensToRead() && new ClassParser(this).recognizeClassContent()) { // enquanto houver comandos validos dentro da classe 
+						while (tokensToRead() && new ClassParser(this, ec).recognizeClassContent()) { // enquanto houver comandos validos dentro da classe 
 							index++;							
 						}
 						if (!tokensList.get(index).lexeme.equals("}")) { // nao ha mais comandos dentro da classe, achou o "}"

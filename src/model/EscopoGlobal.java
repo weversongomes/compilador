@@ -42,7 +42,7 @@ public class EscopoGlobal extends Escopo {
 	}
 	
 	public void showSimbols() {
-		System.out.println("PRINTING ALL SIMBOLS");
+		System.out.println("SIMBOLOS ESCOPO GLOBAL");
 		for (Simbol s : simbols) {
 			System.out.println(s.name + " - " + s.value + " - " + s.type + " - " + s.isConstant);
 		}

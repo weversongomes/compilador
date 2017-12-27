@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import model.Escopo;
 import model.EscopoGlobal;
 import model.Token;
 
@@ -23,7 +24,11 @@ public class Parser {
 		System.out.println("---------- INICIO DA ANALISE SINTATICA ----------");
 		FileParser fp = new FileParser(tokensList);
 		fp.fileParsing();
-		fp.eg.showSimbols();
+		//fp.eg.showSimbols();
+		System.out.println(fp.escopos.size());
+		for(Escopo escopo : fp.escopos) {
+			escopo.showSimbols();
+		}
 		System.out.println("---------- FIM DA ANALISE SINTATICA ----------");
 		
 		File folder = new File(dir + "/results");

@@ -12,9 +12,9 @@ public class ClassParser {
 	private FileParser fileParser;
 	EscopoClasse ec;
 	
-	public ClassParser(FileParser parser) {
+	public ClassParser(FileParser parser, EscopoClasse ec) {
+		this.ec = ec;
 		this.fileParser = parser;
-		ec = new EscopoClasse();
 	}
 	
 	// reconhece o conteudo de uma classe, isto eh, metodos e atributos
@@ -72,7 +72,7 @@ public class ClassParser {
 							panicModeMethod();
 						} else {
 							System.out.println("Metodo correto na linha " + fileParser.getTokensList().get(fileParser.index).line);
-							mParser.em.showSimbols();
+							//mParser.em.showSimbols();
 							return true;
 						}
 					} else if (fileParser.getTokensList().get(fileParser.index).lexeme.equals(";") || fileParser.getTokensList().get(fileParser.index).lexeme.equals(",")) { // declaracao de variavel

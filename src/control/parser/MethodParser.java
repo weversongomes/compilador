@@ -19,10 +19,11 @@ public class MethodParser {
 	public EscopoMetodo em;
 	
 	public MethodParser(FileParser parser, EscopoClasse escopo) {
-		this.parser = parser;
-		this.escopoPai = escopo;
 		em = new EscopoMetodo();
 		em.escopoPai = escopoPai;
+		parser.escopos.add(em);
+		this.parser = parser;
+		this.escopoPai = escopo;
 	}
 	
 	// reconhece a estrutura sintatica de um metodo
