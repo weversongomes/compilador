@@ -27,7 +27,7 @@ public class MethodParser {
 	}
 	
 	// reconhece a estrutura sintatica de um metodo
-	public boolean recognizeMethod() {
+	public boolean recognizeMethod(String varType) {
 		boolean isCorrect = true;
 		int methodIndex = 0;
 		Simbol simbol = new Simbol();
@@ -38,6 +38,7 @@ public class MethodParser {
 						isCorrect = false;
 					}
 					simbol.type = "metodo";
+					simbol.value = varType;
 					escopoPai.addSimbol(simbol);
 					methodIndex++;
 					parser.index = parser.index + 1;

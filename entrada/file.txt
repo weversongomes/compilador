@@ -1,9 +1,9 @@
-int x, a, b;
+final int x = 10;
 
 class Classe1 : Classe2 {	
-	float c, d, e;
+	final float c, d, e;
 	
-	int metodo (string x, bool y) {	
+	int doSomething (string x, bool y) {	
 		bool a, b, c;
 		a = true;
 		int[10] teste0;
@@ -26,11 +26,10 @@ class Classe1 : Classe2 {
 		if (a > 40 || a < 10) {
 			print("Teste", a);
 			scan(a, x, y, b);
-
 		} else {
 			acesso1:acesso2:acesso3:acesso4(x):acesso5(x, y):acesso6():acesso7(x, y, z, a, b, c);
 		}
-		 <:z:>
+		<:z:>
 	}
 	
 	bool main() {
