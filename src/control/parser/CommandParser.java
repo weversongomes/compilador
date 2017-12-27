@@ -1,6 +1,8 @@
 package control.parser;
 
+import model.Escopo;
 import model.EscopoMetodo;
+import model.SemanticAnalyzer;
 
 /**
  * 
@@ -54,14 +56,23 @@ public class CommandParser {
 			}
 		} else if (parser.isAttributeType() || parser.getTokensList().get(parser.index).type.equals("ID")) { // inicializacao
 			String varType = parser.getTokensList().get(parser.index).lexeme;
+			String attrVar = varType;
 			parser.index = parser.index + 1;
 			if (parser.tokensToRead() && parser.getTokensList().get(parser.index).lexeme.equals("=")) { // inicializacao de variavel local
+				
 				parser.index = parser.index - 1; // para comecar a varredura de inicializacao de variavel pelo id
 				if (!new VariableParser(parser).recognizeInitialization(false, varType)) { // verifica se a atribuicao esta correta
 					panicModeLocalVariableInitialization();
 				} else {
+					if (SemanticAnalyzer.verificarTipos(attrVar, parser.getTokensList().get(parser.index).lexeme, escopo).equals("ok")) {
+						System.out.println("tipos compativeis");
+					} else {
+						System.out.println("tipos imcompativeis");
+					}
+					
 					parser.index = parser.index + 1;
 					if (parser.tokensToRead() && parser.getTokensList().get(parser.index).lexeme.equals(";")) { // inicializacao
+						
 						System.out.println("Inicializacao de variavel local correta na linha " + parser.getTokensList().get(parser.index).line);
 						return true;
 					} else if (parser.tokensToRead() && parser.getTokensList().get(parser.index).type.equals("ARIOP")) { // inicializacao com operacao aritmetica

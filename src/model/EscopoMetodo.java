@@ -4,11 +4,15 @@ import java.util.ArrayList;
 
 public class EscopoMetodo extends Escopo {
 	public EscopoClasse escopoPai;
-	ArrayList<Simbol> simbols;
+	private ArrayList<Simbol> simbols;
 	
 	public EscopoMetodo() {
 		type = "metodo";
 		simbols = new ArrayList<Simbol>();
+	}
+
+	public EscopoClasse getEscopoPai() {
+		return escopoPai;
 	}
 
 	/**
@@ -40,6 +44,25 @@ public class EscopoMetodo extends Escopo {
 			System.out.println("OBJETO NAO ENCONTRADO");
 		}
 		return 0;
+	}
+
+	public ArrayList<Simbol> getSimbols() {
+		return this.simbols;
+	}
+
+	/**
+	 * 
+	 * @param simbol
+	 * @return value
+	 */
+	public String getSimbolValue(String simbolName) {
+		Simbol simbol = new Simbol();
+		simbol.name = simbolName;
+		if (simbols.contains(simbol)) {
+			simbol = simbols.get(simbols.indexOf(simbol));
+			return simbol.value;
+		}
+		return null;
 	}
 	
 	public void showSimbols() {
