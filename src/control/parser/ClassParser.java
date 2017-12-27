@@ -1,6 +1,7 @@
 package control.parser;
 
 import model.EscopoClasse;
+import model.Simbol;
 
 /**
  * 
@@ -55,6 +56,11 @@ public class ClassParser {
 					fileParser.index = fileParser.index + 1;
 				}
 				if (fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index).lexeme.equals("main") && isVector == false && isFinal == false) { // declaracao da main nao pode ter vetor nem final
+					Simbol simbol = new Simbol();
+					simbol.name = "main";
+					simbol.type = "metodo";
+					simbol.isConstant = isFinal;
+					ec.addSimbol(simbol);
 					fileParser.index = fileParser.index - 1;
 					MethodParser mParser = new MethodParser(fileParser, ec);
 					if (!mParser.recognizeMain()) {

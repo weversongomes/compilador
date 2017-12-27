@@ -16,12 +16,10 @@ public class EscopoClasse extends Escopo {
 	 * @param simbol
 	 * @return operation result
 	 */
-	public int addSimbol(String simbolName, String simbolType) {
-		Simbol simbol = new Simbol();
-		simbol.name = simbolName;
-		simbol.type = simbolType;
+	public int addSimbol(Simbol simbol) {
 		if (!simbols.contains(simbol)) {
 			simbols.add(simbol);
+			return 1;
 		}
 		return 0;
 	}
