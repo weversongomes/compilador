@@ -2,6 +2,7 @@ package control.parser;
 
 import model.EscopoClasse;
 import model.EscopoMetodo;
+import model.SemanticAnalyzer;
 import model.Symbol;
 
 /**
@@ -19,11 +20,11 @@ public class MethodParser {
 	public EscopoMetodo em;
 	
 	public MethodParser(FileParser parser, EscopoClasse escopo) {
+		this.escopoPai = escopo;
 		em = new EscopoMetodo();
 		em.escopoPai = escopoPai;
-		parser.escopos.add(em);
 		this.parser = parser;
-		this.escopoPai = escopo;
+		parser.escopos.add(em);
 	}
 	
 	// reconhece a estrutura sintatica de um metodo
@@ -203,6 +204,13 @@ public class MethodParser {
 					}
 					if (mainIndex < 7) {
 						parser.index = parser.index + 1;
+					} else {
+						//em.escopoPai.getEscopoPai();
+						if (SemanticAnalyzer.checkMainMethod("main", escopoPai.getEscopoPai(), escopoPai).equals("ok")) {
+							System.out.println("Correto. Apenas um metodo main existente ate aqui");
+						} else {
+							System.out.println("Ja existe um metodo main no codigo");
+						}
 					}
 					mainIndex++;
 				}

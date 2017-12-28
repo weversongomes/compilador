@@ -70,6 +70,18 @@ public class SemanticAnalyzer {
 		return "err3";
 	}
 	
+	public static String checkMainMethod(String value, Escopo globalScope, Escopo classScope) {
+		Symbol main = new Symbol();
+		main.name = value;
+		for (Symbol s : globalScope.getSimbols()) {
+			if (s.type.equals("class")) { // verifica em todas as classes se ja tem um metodo main
+				// como obter cada EscopoClasse a partir do Symbol?
+			}
+		}
+		
+		return "ok";
+	}
+	
 	private static boolean isBool(String value) {
 		return value.equals("true") || value.equals("false");
 	}

@@ -7,7 +7,7 @@ public class EscopoClasse extends Escopo {
 	Escopo escopoPai;
 	
 	public EscopoClasse() {
-		type = "classe";
+		type = "class";
 		symbols = new ArrayList<Symbol>();
 	}
 	
@@ -29,5 +29,13 @@ public class EscopoClasse extends Escopo {
 		for (Symbol s : symbols) {
 			System.out.println(s.name + " - " + s.value + " - " + s.type + " - " + s.isConstant);
 		}
+	}
+	
+	public Escopo getEscopoPai() {
+		return escopoPai;
+	}
+	
+	public void setEscopoPai(Escopo escopoPai) {
+		this.escopoPai = escopoPai;
 	}
 }

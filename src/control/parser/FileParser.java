@@ -85,6 +85,7 @@ public class FileParser {
 					index++;
 				} else if (classIndex == 3) { // verifica se os comandos estao corretos
 					EscopoClasse ec = new EscopoClasse();
+					ec.setEscopoPai(eg);
 					escopos.add(ec);
 					if (tokensList.get(index).lexeme.equals("}")) { // se for um um "}" eh porque nao ha nenhum comando dentro da classe
 						classIndex++;

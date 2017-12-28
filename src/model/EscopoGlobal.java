@@ -47,4 +47,8 @@ public class EscopoGlobal extends Escopo {
 			System.out.println(s.name + " - " + s.value + " - " + s.type + " - " + s.isConstant);
 		}
 	}
+	
+	public ArrayList<Symbol> getSimbols() {
+		return this.symbols;
+	}
 }
