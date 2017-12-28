@@ -38,4 +38,8 @@ public class EscopoClasse extends Escopo {
 	public void setEscopoPai(Escopo escopoPai) {
 		this.escopoPai = escopoPai;
 	}
+	
+	public ArrayList<Symbol> getSimbols() {
+		return this.symbols;
+	}
 }

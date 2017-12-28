@@ -209,5 +209,19 @@ public class FileParser {
 	public boolean tokensToRead() {
 		return index < tokensList.size();
 	}
+	
+	public boolean hasMain() {
+		for (Escopo e : escopos) {
+			if (e instanceof EscopoClasse) {
+				for (Symbol s : e.getSimbols()) {
+					if (s.name.equals("main")) {
+						return true;
+					}
+				}
+			}
+		}
+		
+		return false;
+	}
 
 }

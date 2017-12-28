@@ -44,4 +44,8 @@ class Classe1 : Classe2 {
 	}
 }
 
-class Classe3 { }
+class Classe3 { 
+	bool main() {
+		<:retorno:>
+	}
+}

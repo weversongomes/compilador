@@ -56,17 +56,17 @@ public class ClassParser {
 					fileParser.index = fileParser.index + 1;
 				}
 				if (fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index).lexeme.equals("main") && isVector == false && isFinal == false) { // declaracao da main nao pode ter vetor nem final
-					Symbol symbol = new Symbol();
-					symbol.name = "main";
-					symbol.type = "metodo";
-					symbol.value = "bool";
-					symbol.isConstant = isFinal;
-					ec.addSimbol(symbol);
 					fileParser.index = fileParser.index - 1;
 					MethodParser mParser = new MethodParser(fileParser, ec);
 					if (!mParser.recognizeMain()) {
 						panicModeMethod();
 					} else {
+						Symbol symbol = new Symbol();
+						symbol.name = "main";
+						symbol.type = "metodo";
+						symbol.value = "bool";
+						symbol.isConstant = isFinal;
+						ec.addSimbol(symbol);
 						System.out.println("Main correta na linha " + fileParser.getTokensList().get(fileParser.index).line);
 						return true;
 					}

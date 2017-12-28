@@ -208,7 +208,8 @@ public class MethodParser {
 						parser.index = parser.index + 1;
 					} else {
 						//em.escopoPai.getEscopoPai();
-						if (SemanticAnalyzer.checkMainMethod("main", escopoPai.getEscopoPai(), escopoPai).equals("ok")) {
+						//if (SemanticAnalyzer.checkMainMethod("main", escopoPai.getEscopoPai(), escopoPai).equals("ok")) {
+						if (!parser.hasMain()) {
 							System.out.println("Correto. Apenas um metodo main existente ate aqui");
 						} else {
 							System.out.println("Ja existe um metodo main no codigo");
