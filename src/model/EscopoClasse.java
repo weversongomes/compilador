@@ -3,22 +3,22 @@ package model;
 import java.util.ArrayList;
 
 public class EscopoClasse extends Escopo {
-	ArrayList<Simbol> simbols;
+	ArrayList<Symbol> symbols;
 	Escopo escopoPai;
 	
 	public EscopoClasse() {
 		type = "classe";
-		simbols = new ArrayList<Simbol>();
+		symbols = new ArrayList<Symbol>();
 	}
 	
 	/**
 	 * 
-	 * @param simbol
+	 * @param symbol
 	 * @return operation result
 	 */
-	public int addSimbol(Simbol simbol) {
-		if (!simbols.contains(simbol)) {
-			simbols.add(simbol);
+	public int addSimbol(Symbol symbol) {
+		if (!symbols.contains(symbol)) {
+			symbols.add(symbol);
 			return 1;
 		}
 		return 0;
@@ -26,7 +26,7 @@ public class EscopoClasse extends Escopo {
 	
 	public void showSimbols() {
 		System.out.println("SIMBOLOS ESCOPO CLASSE");
-		for (Simbol s : simbols) {
+		for (Symbol s : symbols) {
 			System.out.println(s.name + " - " + s.value + " - " + s.type + " - " + s.isConstant);
 		}
 	}

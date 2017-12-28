@@ -64,7 +64,7 @@ public class CommandParser {
 				if (!new VariableParser(parser).recognizeInitialization(false, varType)) { // verifica se a atribuicao esta correta
 					panicModeLocalVariableInitialization();
 				} else {
-					if (SemanticAnalyzer.verificarTipos(attrVar, parser.getTokensList().get(parser.index).lexeme, escopo).equals("ok")) {
+					if (SemanticAnalyzer.checkType(attrVar, parser.getTokensList().get(parser.index).lexeme, escopo).equals("ok")) {
 						System.out.println("tipos compativeis");
 					} else {
 						System.out.println("tipos imcompativeis");
@@ -77,7 +77,7 @@ public class CommandParser {
 						return true;
 					} else if (parser.tokensToRead() && parser.getTokensList().get(parser.index).type.equals("ARIOP")) { // inicializacao com operacao aritmetica
 						parser.index = parser.index + 1;
-						if (parser.tokensToRead() && new OperationParser(parser).recognizeArithmeticOperation()) {
+						if (parser.tokensToRead() && new OperationParser(parser, escopo).recognizeArithmeticOperation()) {
 							System.out.println("Inicializacao de variavel local com operacao aritmetica correta na linha " + parser.getTokensList().get(parser.index).line);
 							return true;
 						} else {
@@ -89,11 +89,11 @@ public class CommandParser {
 				}
 			} else if (parser.tokensToRead() && parser.getTokensList().get(parser.index).type.equals("ARIOP")) { // operacao aritmetica
 				parser.index = parser.index + 1;
-				if (parser.tokensToRead() && new OperationParser(parser).recognizeArithmeticOperation()) {
+				if (parser.tokensToRead() && new OperationParser(parser, escopo).recognizeArithmeticOperation()) {
 					System.out.println("Operacao aritmetica correta na linha " + parser.getTokensList().get(parser.index).line);
 					return true;
 				} else {
-					new OperationParser(parser).panicModeArithmeticOperation();
+					new OperationParser(parser, escopo).panicModeArithmeticOperation();
 				}
 			
 			} else if (parser.tokensToRead() && parser.getTokensList().get(parser.index).lexeme.equals(":")) { // acesso a metodos ou atributos de objetos
@@ -147,7 +147,7 @@ public class CommandParser {
 					forIndex++;
 					parser.index = parser.index + 1;
 				} else if (forIndex == 4) { // verifica se a condicao do for esta correta
-					if (!new OperationParser(parser).recognizeRelationalOperation()) {
+					if (!new OperationParser(parser, escopo).recognizeRelationalOperation()) {
 						isCorrect = false;
 					}
 					forIndex++;
@@ -193,7 +193,7 @@ public class CommandParser {
 			parser.index = parser.index + 1;
 			if (parser.tokensToRead() && parser.getTokensList().get(parser.index).lexeme.equals("=")) {
 				parser.index = parser.index + 1;
-				if (parser.tokensToRead() && new OperationParser(parser).recognizeArithmeticOperation()) {
+				if (parser.tokensToRead() && new OperationParser(parser, escopo).recognizeArithmeticOperation()) {
 					return true;
 				}
 			}
@@ -208,7 +208,7 @@ public class CommandParser {
 		while (ifIndex < ifStructure.length) {
 			if (parser.tokensToRead()) {
 				if (ifIndex == 2) { // verifica se a condicao do if esta correta
-					if (!new OperationParser(parser).recognizeRelationalOperation()) {
+					if (!new OperationParser(parser, escopo).recognizeRelationalOperation()) {
 						isCorrect = false;
 					}
 					ifIndex++;

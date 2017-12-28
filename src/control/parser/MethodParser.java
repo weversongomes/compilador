@@ -2,7 +2,7 @@ package control.parser;
 
 import model.EscopoClasse;
 import model.EscopoMetodo;
-import model.Simbol;
+import model.Symbol;
 
 /**
  * 
@@ -30,23 +30,23 @@ public class MethodParser {
 	public boolean recognizeMethod(String varType) {
 		boolean isCorrect = true;
 		int methodIndex = 0;
-		Simbol simbol = new Simbol();
+		Symbol symbol = new Symbol();
 		while (methodIndex < methodStructure.length) {
 			if (parser.tokensToRead()) {
 				if (methodIndex == 0) { // verifica se o retorno do metodo esta correto
 					if (!(parser.isAttributeType() || parser.getTokensList().get(parser.index).type.equals("ID"))) {
 						isCorrect = false;
 					}
-					simbol.type = "metodo";
-					simbol.value = varType;
-					escopoPai.addSimbol(simbol);
+					symbol.type = "metodo";
+					symbol.value = varType;
+					escopoPai.addSimbol(symbol);
 					methodIndex++;
 					parser.index = parser.index + 1;
 				} else if (methodIndex == 1) { // verifica se o nome do metodo eh valido
 					if (!parser.getTokensList().get(parser.index).type.equals("ID")) {
 						isCorrect = false;
 					}
-					simbol.name = parser.getTokensList().get(parser.index).lexeme;
+					symbol.name = parser.getTokensList().get(parser.index).lexeme;
 					methodIndex++;
 					parser.index = parser.index + 1;
 				} else if (methodIndex == 3) { // verifica se os parametros do metodo estao corretos
@@ -94,17 +94,17 @@ public class MethodParser {
 	public boolean recognizeMethodParameters() {
 		boolean isFirstParameter = true;
 		while (parser.tokensToRead() && !parser.getTokensList().get(parser.index).lexeme.equals(")")) {
-			Simbol simbol = new Simbol();
+			Symbol symbol = new Symbol();
 			if (isFirstParameter) { // se for o primeiro parametro, nao tem virgula antes
 				if (parser.isAttributeType() || parser.getTokensList().get(parser.index).type.equals("ID")) { // verifica se o tipo do parametro esta correto
-					simbol.type = parser.getTokensList().get(parser.index).lexeme;
+					symbol.type = parser.getTokensList().get(parser.index).lexeme;
 					parser.index = parser.index + 1;
 				} else {
 					return false;
 				}
 				if (parser.tokensToRead() && parser.getTokensList().get(parser.index).type.equals("ID")) { // verifica se o nome do parametro eh valido
-					simbol.name = parser.getTokensList().get(parser.index).lexeme;
-					em.addSimbol(simbol);
+					symbol.name = parser.getTokensList().get(parser.index).lexeme;
+					em.addSimbol(symbol);
 					parser.index = parser.index + 1;
 					isFirstParameter = false; // se tiver proximo parametro, nao sera mais o primeiro
 				} else {
@@ -117,14 +117,14 @@ public class MethodParser {
 					return false;
 				}
 				if (parser.tokensToRead() && (parser.isAttributeType() || parser.getTokensList().get(parser.index).type.equals("ID"))) { // verifica se o tipo do parametro esta correto
-					simbol.type = parser.getTokensList().get(parser.index).lexeme;
+					symbol.type = parser.getTokensList().get(parser.index).lexeme;
 					parser.index = parser.index + 1;
 				} else {
 					return false;
 				}
 				if (parser.tokensToRead() && (parser.getTokensList().get(parser.index).type.equals("ID"))) { // verifica se o nome do parametro eh valido
-					simbol.name = parser.getTokensList().get(parser.index).lexeme;
-					em.addSimbol(simbol);
+					symbol.name = parser.getTokensList().get(parser.index).lexeme;
+					em.addSimbol(symbol);
 					parser.index = parser.index + 1;
 				} else {
 					return false;

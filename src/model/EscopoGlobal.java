@@ -3,21 +3,21 @@ package model;
 import java.util.ArrayList;
 
 public class EscopoGlobal extends Escopo {
-	ArrayList<Simbol> simbols;
+	ArrayList<Symbol> symbols;
 	
 	public EscopoGlobal() {
 		type = "global";
-		simbols = new ArrayList<Simbol>();
+		symbols = new ArrayList<Symbol>();
 	}
 	
 	/**
 	 * 
-	 * @param simbol
+	 * @param symbol
 	 * @return operation result
 	 */
-	public int addSimbol(Simbol simbol) {
-		if (!simbols.contains(simbol)) {
-			simbols.add(simbol);
+	public int addSimbol(Symbol symbol) {
+		if (!symbols.contains(symbol)) {
+			symbols.add(symbol);
 			return 1;
 		}
 		return 0;
@@ -30,11 +30,11 @@ public class EscopoGlobal extends Escopo {
 	 * @return operation result
 	 */
 	public int setSimbolValue(String simbolName, String value) {
-		Simbol simbol = new Simbol();
-		simbol.name = simbolName;
-		if (simbols.contains(simbol)) {
-			simbol = simbols.get(simbols.indexOf(simbol));
-			simbol.value = value;
+		Symbol symbol = new Symbol();
+		symbol.name = simbolName;
+		if (symbols.contains(symbol)) {
+			symbol = symbols.get(symbols.indexOf(symbol));
+			symbol.value = value;
 		} else {
 			System.out.println("OBJETO NAO ENCONTRADO");
 		}
@@ -43,7 +43,7 @@ public class EscopoGlobal extends Escopo {
 	
 	public void showSimbols() {
 		System.out.println("SIMBOLOS ESCOPO GLOBAL");
-		for (Simbol s : simbols) {
+		for (Symbol s : symbols) {
 			System.out.println(s.name + " - " + s.value + " - " + s.type + " - " + s.isConstant);
 		}
 	}

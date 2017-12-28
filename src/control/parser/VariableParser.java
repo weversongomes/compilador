@@ -1,7 +1,7 @@
 package control.parser;
 
 import model.Escopo;
-import model.Simbol;
+import model.Symbol;
 
 /**
  * 
@@ -22,11 +22,11 @@ public class VariableParser {
 		while (fileParser.tokensToRead() && !fileParser.getTokensList().get(fileParser.index).lexeme.equals(";")) {
 			if (isFirstVariable) { // se for a primeira variavel, nao tem virgula antes
 				if (fileParser.getTokensList().get(fileParser.index).type.equals("ID")) { // verifica se o nome da variavel eh valido
-					Simbol simbol = new Simbol();
-					simbol.name = fileParser.getTokensList().get(fileParser.index).lexeme;
-					simbol.type = varType;
-					simbol.isConstant = isConstant;
-					escopo.addSimbol(simbol);
+					Symbol symbol = new Symbol();
+					symbol.name = fileParser.getTokensList().get(fileParser.index).lexeme;
+					symbol.type = varType;
+					symbol.isConstant = isConstant;
+					escopo.addSimbol(symbol);
 					fileParser.index = fileParser.index + 1;
 					isFirstVariable = false;
 				} else {
@@ -39,11 +39,11 @@ public class VariableParser {
 					return false;
 				}
 				if (fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index).type.equals("ID")) { // verifica se o nome da variavel eh valido
-					Simbol simbol = new Simbol();
-					simbol.name = fileParser.getTokensList().get(fileParser.index).lexeme;
-					simbol.type = varType;
-					simbol.isConstant = isConstant;
-					escopo.addSimbol(simbol);
+					Symbol symbol = new Symbol();
+					symbol.name = fileParser.getTokensList().get(fileParser.index).lexeme;
+					symbol.type = varType;
+					symbol.isConstant = isConstant;
+					escopo.addSimbol(symbol);
 					fileParser.index = fileParser.index + 1;
 				} else {
 					return false;
@@ -61,11 +61,11 @@ public class VariableParser {
 			if (fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index).lexeme.equals("=")) {
 				fileParser.index = fileParser.index + 1;
 				if (isConstant) {
-					Simbol simbol = new Simbol();
-					simbol.name = simbolName;
-					simbol.type = varType;
-					simbol.isConstant = true;
-					fileParser.eg.addSimbol(simbol);
+					Symbol symbol = new Symbol();
+					symbol.name = simbolName;
+					symbol.type = varType;
+					symbol.isConstant = true;
+					fileParser.eg.addSimbol(symbol);
 					String simbolValue = fileParser.getTokensList().get(fileParser.index).lexeme;
 					fileParser.eg.setSimbolValue(simbolName, simbolValue);
 				}

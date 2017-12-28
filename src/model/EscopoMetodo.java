@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 public class EscopoMetodo extends Escopo {
 	public EscopoClasse escopoPai;
-	private ArrayList<Simbol> simbols;
+	private ArrayList<Symbol> symbols;
 	
 	public EscopoMetodo() {
 		type = "metodo";
-		simbols = new ArrayList<Simbol>();
+		symbols = new ArrayList<Symbol>();
 	}
 
 	public EscopoClasse getEscopoPai() {
@@ -17,12 +17,12 @@ public class EscopoMetodo extends Escopo {
 
 	/**
 	 * 
-	 * @param simbol
+	 * @param symbol
 	 * @return operation result
 	 */
-	public int addSimbol(Simbol simbol) {
-		if (!simbols.contains(simbol)) {
-			simbols.add(simbol);
+	public int addSimbol(Symbol symbol) {
+		if (!symbols.contains(symbol)) {
+			symbols.add(symbol);
 			return 1;
 		}
 		return 0;
@@ -35,19 +35,19 @@ public class EscopoMetodo extends Escopo {
 	 * @return operation result
 	 */
 	public int setSimbolValue(String simbolName, String value) {
-		Simbol simbol = new Simbol();
-		simbol.name = simbolName;
-		if (simbols.contains(simbol)) {
-			simbol = simbols.get(simbols.indexOf(simbol));
-			simbol.value = value;
+		Symbol symbol = new Symbol();
+		symbol.name = simbolName;
+		if (symbols.contains(symbol)) {
+			symbol = symbols.get(symbols.indexOf(symbol));
+			symbol.value = value;
 		} else {
 			System.out.println("OBJETO NAO ENCONTRADO");
 		}
 		return 0;
 	}
 
-	public ArrayList<Simbol> getSimbols() {
-		return this.simbols;
+	public ArrayList<Symbol> getSimbols() {
+		return this.symbols;
 	}
 
 	/**
@@ -56,18 +56,18 @@ public class EscopoMetodo extends Escopo {
 	 * @return value
 	 */
 	public String getSimbolValue(String simbolName) {
-		Simbol simbol = new Simbol();
-		simbol.name = simbolName;
-		if (simbols.contains(simbol)) {
-			simbol = simbols.get(simbols.indexOf(simbol));
-			return simbol.value;
+		Symbol symbol = new Symbol();
+		symbol.name = simbolName;
+		if (symbols.contains(symbol)) {
+			symbol = symbols.get(symbols.indexOf(symbol));
+			return symbol.value;
 		}
 		return null;
 	}
 	
 	public void showSimbols() {
 		System.out.println("SIMBOLOS ESCOPO METODO");
-		for (Simbol s : simbols) {
+		for (Symbol s : symbols) {
 			System.out.println(s.name + " - " + s.value + " - " + s.type + " - " + s.isConstant);
 		}
 	}

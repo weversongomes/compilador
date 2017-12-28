@@ -3,15 +3,22 @@ final int x = 10;
 class Classe1 : Classe2 {	
 	final float c, d, e;
 	
-	int doSomething (string x, bool y) {	
+	int doSomething (string xxx, bool yyy) {	
 		bool a, b, c;
 		a = true;
 		int[10] teste0;
 		teste0 = 546;
+		string st;
+		st = "Exemplo";
+		int k;
+		k = -50;
+		float j;
+		j = -12.34;
 		float[4][5] var1, var2;
 		var1 = 123.000;
 		int i;
 		i = g / h + a - b * c % d;
+		int x, y;
 		
 		metodo1();
 		
@@ -19,11 +26,11 @@ class Classe1 : Classe2 {
 			print("Teste");
 			scan(x);	
 		}
-		if (x < 20 && x > 30) {
+		if (x < 20 && x > y && a=false) {
 			print(x);
 			scan(x, y);
 		}
-		if (a > 40 || a < 10) {
+		if (y > 40 || y < 10) {
 			print("Teste", a);
 			scan(a, x, y, b);
 		} else {

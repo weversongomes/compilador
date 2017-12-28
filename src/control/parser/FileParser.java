@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import model.Escopo;
 import model.EscopoClasse;
 import model.EscopoGlobal;
-import model.Simbol;
+import model.Symbol;
 import model.Token;
 
 /**
@@ -64,10 +64,10 @@ public class FileParser {
 					if (!tokensList.get(index).type.equals("ID")) {
 						isCorrect = false;
 					}
-					Simbol simbol = new Simbol();
-					simbol.name = getTokensList().get(index).lexeme;
-					simbol.type = "class";
-					eg.addSimbol(simbol);
+					Symbol symbol = new Symbol();
+					symbol.name = getTokensList().get(index).lexeme;
+					symbol.type = "class";
+					eg.addSimbol(symbol);
 					classIndex++;
 					index++;
 				} else if (classIndex == 2) {
@@ -128,14 +128,14 @@ public class FileParser {
 					if (tokensToRead() && tokensList.get(index).lexeme.equals(";")) { // inicializacao
 						System.out.println("Inicializacao de variavel global correta na linha " + tokensList.get(index).line);
 						return true;
-					} else if (tokensToRead() && tokensList.get(index).type.equals("ARIOP")) { // inicializacao com operacao aritmetica
+/*					} else if (tokensToRead() && tokensList.get(index).type.equals("ARIOP")) { // inicializacao com operacao aritmetica
 						index++;
 						if (tokensToRead() && new OperationParser(this).recognizeArithmeticOperation()) {
 							System.out.println("Inicializacao de variavel global com operacao aritmetica correta na linha " + tokensList.get(index).line);
 							return true;
 						} else {
 							panicModeGlobalVariableInitialization();
-						}
+						}*/
 					} else {
 						panicModeGlobalVariableInitialization();
 					}

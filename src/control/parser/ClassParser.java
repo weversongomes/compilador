@@ -1,7 +1,7 @@
 package control.parser;
 
 import model.EscopoClasse;
-import model.Simbol;
+import model.Symbol;
 
 /**
  * 
@@ -38,14 +38,14 @@ public class ClassParser {
 					if (fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index).lexeme.equals(";")) { // inicializacao
 						System.out.println("Inicializacao de atributo correta na linha " + fileParser.getTokensList().get(fileParser.index).line);
 						return true;
-					} else if (fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index).type.equals("ARIOP")) { // inicializacao com operacao aritmetica
+/*					} else if (fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index).type.equals("ARIOP")) { // inicializacao com operacao aritmetica
 						fileParser.index = fileParser.index + 1;
 						if (fileParser.tokensToRead() && new OperationParser(fileParser).recognizeArithmeticOperation()) {
 							System.out.println("Inicializacao de atributo com operacao aritmetica correta na linha " + fileParser.getTokensList().get(fileParser.index).line);
 							return true;
 						} else {
 							panicModeAttributeInitialization();
-						}
+						}*/
 					} else {
 						panicModeAttributeInitialization();
 					}
@@ -56,12 +56,12 @@ public class ClassParser {
 					fileParser.index = fileParser.index + 1;
 				}
 				if (fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index).lexeme.equals("main") && isVector == false && isFinal == false) { // declaracao da main nao pode ter vetor nem final
-					Simbol simbol = new Simbol();
-					simbol.name = "main";
-					simbol.type = "metodo";
-					simbol.value = "bool";
-					simbol.isConstant = isFinal;
-					ec.addSimbol(simbol);
+					Symbol symbol = new Symbol();
+					symbol.name = "main";
+					symbol.type = "metodo";
+					symbol.value = "bool";
+					symbol.isConstant = isFinal;
+					ec.addSimbol(symbol);
 					fileParser.index = fileParser.index - 1;
 					MethodParser mParser = new MethodParser(fileParser, ec);
 					if (!mParser.recognizeMain()) {

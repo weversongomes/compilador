@@ -4,21 +4,21 @@ import java.util.ArrayList;
 
 public class Escopo {
 	public String type;
-	private ArrayList<Simbol> simbols;
+	private ArrayList<Symbol> symbols;
 	
 	public Escopo() {
-		simbols = new ArrayList<Simbol>();
+		symbols = new ArrayList<Symbol>();
 	}
 	
 	/**
 	 * SOBRESCREVER NA CLASSE HERDEIRA
 	 */
-	public int addSimbol(Simbol simbol) {
+	public int addSimbol(Symbol symbol) {
 		return 0;
 	}
 
-	public ArrayList<Simbol> getSimbols() {
-		return this.simbols;
+	public ArrayList<Symbol> getSimbols() {
+		return this.symbols;
 	}
 
 	/**
