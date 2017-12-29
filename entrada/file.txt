@@ -1,16 +1,17 @@
 final int x = 10;
-final string cSequence = "cadeia de caracteres";
+int asdfdas = 20;
 
 class Classe1 : Classe2 {	
 	final float c, d, e;
 	bool myvar1;
+	int h;
 	
 	int doSomething (string x, int y) {	
 		bool a, b, c;
 		a = true;
 		int[10] teste0;
 		teste0 = 546;
-		float[4][5] var1, var2;
+		float var1, var2;
 		var1 = 123.000;
 		int i;
 		i = g / h + a - b * c % d;
@@ -34,6 +35,7 @@ class Classe1 : Classe2 {
 	
 	bool main() {
 		int l;
+		l = 30;
 		cSequence = "cadeia de caracteres";
 		doSomething(cSequence, l);
 		<:ret:>

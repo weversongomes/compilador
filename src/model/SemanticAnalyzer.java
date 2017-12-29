@@ -23,8 +23,11 @@ public class SemanticAnalyzer {
 			if (symbol.type.equals("float")) {
 				return "ok";
 			}
+		} else if (isString(value)) { // verifica se eh uma string atribuido corretamente
+			if (symbol.type.equals("string")) {
+				return "ok";
+			}
 		}
-		
 		return "err2";
 	}
 	
@@ -193,6 +196,6 @@ public class SemanticAnalyzer {
 			e.printStackTrace();
 			return "ERRO SEMANTICO: Chamada imcompativel de metodo na linha " + line;
 		}
-		return "Chamada de metodo semanticamente correta na linha " + line;
+		return "SEMATINCO: Chamada de metodo semanticamente correta na linha " + line;
 	}
 }

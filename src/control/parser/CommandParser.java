@@ -66,9 +66,9 @@ public class CommandParser {
 					panicModeLocalVariableInitialization();
 				} else {
 					if (SemanticAnalyzer.checkType(attrVar, parser.getTokensList().get(parser.index).lexeme, escopo).equals("ok")) {
-						System.out.println("tipos compativeis");
+						System.out.println("SEMATINCO: Tipos compativeis na linha " + parser.getTokensList().get(parser.index).line);
 					} else {
-						System.out.println("tipos imcompativeis");
+						System.out.println("SEMATINCO: Tipos imcompativeis na linha " + parser.getTokensList().get(parser.index).line);
 					}
 					
 					parser.index = parser.index + 1;
