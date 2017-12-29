@@ -27,7 +27,7 @@ class Classe1 : Classe2 {
 		var1[3][4][2][9][332] = 123.000;
 		int i;
 		int x, y;
-		bool a;
+		int a;
 		
 		metodo1();
 		
@@ -35,11 +35,11 @@ class Classe1 : Classe2 {
 			print("Teste");
 			scan(x);	
 		}
-		if (x < 20 && x > y && a=false) {
+		if (x < 20 && x > 30) {
 			print(x);
 			scan(x, y);
 		}
-		if (y > 40 || y < 10) {
+		if (a > 40 || a < 10) {
 			print("Teste", a);
 			scan(a, x, y, b);
 		} else {
@@ -49,12 +49,12 @@ class Classe1 : Classe2 {
 	}
 	
 	bool main() {
+		int l;
+		l = 30;
+		cSequence = "cadeia de caracteres";
+		doSomething(cSequence, l);
 		<:ret:>
 	}
 }
 
-class Classe3 { 
-	bool main() {
-		<:retorno:>
-	}
-}
+class Classe3 { }

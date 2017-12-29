@@ -99,14 +99,13 @@ public class MethodParser {
 			if (isFirstParameter) { // se for o primeiro parametro, nao tem virgula antes
 				if (parser.isAttributeType() || parser.getTokensList().get(parser.index).type.equals("ID")) { // verifica se o tipo do parametro esta correto
 					symbol.type = parser.getTokensList().get(parser.index).lexeme;
-					symbol.isParam = true;
 					parser.index = parser.index + 1;
 				} else {
 					return false;
 				}
 				if (parser.tokensToRead() && parser.getTokensList().get(parser.index).type.equals("ID")) { // verifica se o nome do parametro eh valido
 					symbol.name = parser.getTokensList().get(parser.index).lexeme;
-					em.addSimbol(symbol);
+					em.addParam(symbol);
 					parser.index = parser.index + 1;
 					isFirstParameter = false; // se tiver proximo parametro, nao sera mais o primeiro
 				} else {
@@ -120,14 +119,13 @@ public class MethodParser {
 				}
 				if (parser.tokensToRead() && (parser.isAttributeType() || parser.getTokensList().get(parser.index).type.equals("ID"))) { // verifica se o tipo do parametro esta correto
 					symbol.type = parser.getTokensList().get(parser.index).lexeme;
-					symbol.isParam = true;
 					parser.index = parser.index + 1;
 				} else {
 					return false;
 				}
 				if (parser.tokensToRead() && (parser.getTokensList().get(parser.index).type.equals("ID"))) { // verifica se o nome do parametro eh valido
 					symbol.name = parser.getTokensList().get(parser.index).lexeme;
-					em.addSimbol(symbol);
+					em.addParam(symbol);
 					parser.index = parser.index + 1;
 				} else {
 					return false;
@@ -136,6 +134,10 @@ public class MethodParser {
 		}
 		parser.index = parser.index - 1; // achou o ")", entao a leitura continua a partir dele
 		return true;
+	}
+	
+	public void setMethodName(String methodName) {
+		em.name = methodName;
 	}
 	
 	// reconhece a estrutura sintatica do retorno de um metodo

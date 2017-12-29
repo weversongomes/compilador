@@ -39,8 +39,11 @@ public class SemanticAnalyzer {
 			if (varType[0].equals("float")) {
 				return "ok";
 			}
+		} else if (isString(value)) { // verifica se eh uma string atribuido corretamente
+			if (symbol.type.equals("string")) {
+				return "ok";
+			}
 		}
-		
 		return "err2";
 	}
 	
@@ -109,19 +112,19 @@ public class SemanticAnalyzer {
 		return "ok";
 	}
 	
-	private static boolean isBool(String value) {
+	public static boolean isBool(String value) {
 		return value.equals("true") || value.equals("false");
 	}
 	
-	private static boolean isInt(String value) {
+	public static boolean isInt(String value) {
 		return value.matches("^-?\\d+$");
 	}
 	
-	private static boolean isFloat(String value) {
+	public static boolean isFloat(String value) {
 		return value.matches("^-?\\d*\\.?\\d*");
 	}
 	
-	private static boolean isString(String value) { // eh necessario verificar se a string esta formada corretamente, com as aspas corretas, por ex 
+	public static boolean isString(String value) { // eh necessario verificar se a string esta formada corretamente, com as aspas corretas, por ex 
 		return true;
 	}
 	
@@ -130,4 +133,101 @@ public class SemanticAnalyzer {
 		return value.split("(?=" + Pattern.quote("[") + ")");
 	}
 
+	public static String validateMethodParams(String pParam, EscopoMetodo meuEscopo, EscopoMetodo outroEscopo, int indexParam, int line) {
+		try {
+			String methodParam = outroEscopo.getParams().get(indexParam);
+			Symbol symbol = new Symbol();
+			symbol.name = methodParam;
+			String methodParamType = outroEscopo.getSimbols().get(outroEscopo.getSimbols().indexOf(symbol)).type;
+			if (methodParamType.equals("bool")) {
+				Symbol auxsymbol = new Symbol();
+				auxsymbol.name = pParam;
+				String paramType;
+				if (meuEscopo.getSimbols().indexOf(auxsymbol) == -1) {//verifica no escopo de metodo
+					if (outroEscopo.escopoPai.getSimbols().indexOf(auxsymbol) == -1) {////verifica no escopo de classe
+						if (outroEscopo.escopoPai.escopoPai.getSimbols().indexOf(auxsymbol) == -1) {//verifica no escopo global
+							return "ERRO SEMANTICO: O parametro passado na linha " + line + " nao foi declarado";
+						} else {
+							paramType = outroEscopo.escopoPai.escopoPai.getSimbols().get(outroEscopo.escopoPai.escopoPai.getSimbols().indexOf(auxsymbol)).type;
+						}
+					} else {
+						paramType = outroEscopo.escopoPai.getSimbols().get(outroEscopo.escopoPai.getSimbols().indexOf(auxsymbol)).type;
+					}
+				} else {
+					paramType = meuEscopo.getSimbols().get(meuEscopo.getSimbols().indexOf(auxsymbol)).type;
+				}
+				
+				if (!SemanticAnalyzer.isBool(pParam) && !paramType.equals("bool")) {
+					return "ERRO SEMANTICO: O parametro passado nao e' do tipo bool na linha " + line;
+				}
+			} else if (methodParamType.equals("int")) {
+				Symbol auxsymbol = new Symbol();
+				auxsymbol.name = pParam;
+				String paramType;
+				if (meuEscopo.getSimbols().indexOf(auxsymbol) == -1) {//verifica no escopo de metodo
+					if (outroEscopo.escopoPai.getSimbols().indexOf(auxsymbol) == -1) {////verifica no escopo de classe
+						if (outroEscopo.escopoPai.escopoPai.getSimbols().indexOf(auxsymbol) == -1) {//verifica no escopo global
+							return "ERRO SEMANTICO: O parametro passado na linha " + line + " nao foi declarado";
+						} else {
+							paramType = outroEscopo.escopoPai.escopoPai.getSimbols().get(outroEscopo.escopoPai.escopoPai.getSimbols().indexOf(auxsymbol)).type;
+						}
+					} else {
+						paramType = outroEscopo.escopoPai.getSimbols().get(outroEscopo.escopoPai.getSimbols().indexOf(auxsymbol)).type;
+					}
+				} else {
+					paramType = meuEscopo.getSimbols().get(meuEscopo.getSimbols().indexOf(auxsymbol)).type;
+				}
+				
+				if (!SemanticAnalyzer.isInt(pParam) && !paramType.equals("int")) {
+					return "ERRO SEMANTICO: O parametro passado nao e' do tipo int na linha " + line;
+				}
+			} else if (methodParamType.equals("float")) {
+				Symbol auxsymbol = new Symbol();
+				auxsymbol.name = pParam;
+				String paramType;
+				if (meuEscopo.getSimbols().indexOf(auxsymbol) == -1) {//verifica no escopo de metodo
+					if (outroEscopo.escopoPai.getSimbols().indexOf(auxsymbol) == -1) {////verifica no escopo de classe
+						if (outroEscopo.escopoPai.escopoPai.getSimbols().indexOf(auxsymbol) == -1) {//verifica no escopo global
+							return "ERRO SEMANTICO: O parametro passado na linha " + line + " nao foi declarado";
+						} else {
+							paramType = outroEscopo.escopoPai.escopoPai.getSimbols().get(outroEscopo.escopoPai.escopoPai.getSimbols().indexOf(auxsymbol)).type;
+						}
+					} else {
+						paramType = outroEscopo.escopoPai.getSimbols().get(outroEscopo.escopoPai.getSimbols().indexOf(auxsymbol)).type;
+					}
+				} else {
+					paramType = meuEscopo.getSimbols().get(meuEscopo.getSimbols().indexOf(auxsymbol)).type;
+				}
+				
+				if (!SemanticAnalyzer.isFloat(pParam) && !paramType.equals("float")) {
+					return "ERRO SEMANTICO: O parametro passado nao e' do tipo float na linha " + line;
+				}
+			} else if (methodParamType.equals("string")) {
+				Symbol auxsymbol = new Symbol();
+				auxsymbol.name = pParam;
+				String paramType;
+				if (meuEscopo.getSimbols().indexOf(auxsymbol) == -1) {//verifica no escopo de metodo
+					if (outroEscopo.escopoPai.getSimbols().indexOf(auxsymbol) == -1) {////verifica no escopo de classe
+						if (outroEscopo.escopoPai.escopoPai.getSimbols().indexOf(auxsymbol) == -1) {//verifica no escopo global
+							return "ERRO SEMANTICO: O parametro passado na linha " + line + " nao foi declarado";
+						} else {
+							paramType = outroEscopo.escopoPai.escopoPai.getSimbols().get(outroEscopo.escopoPai.escopoPai.getSimbols().indexOf(auxsymbol)).type;
+						}
+					} else {
+						paramType = outroEscopo.escopoPai.getSimbols().get(outroEscopo.escopoPai.getSimbols().indexOf(auxsymbol)).type;
+					}
+				} else {
+					paramType = meuEscopo.getSimbols().get(meuEscopo.getSimbols().indexOf(auxsymbol)).type;
+				}
+				
+				if (!SemanticAnalyzer.isString(pParam) && !paramType.equals("string")) {
+					return "ERRO SEMANTICO: O parametro passado nao e' do tipo string na linha " + line;
+				}
+			}
+		} catch (IndexOutOfBoundsException e) {
+			e.printStackTrace();
+			return "ERRO SEMANTICO: Chamada imcompativel de metodo na linha " + line;
+		}
+		return "SEMATINCO: Chamada de metodo semanticamente correta na linha " + line;
+	}
 }

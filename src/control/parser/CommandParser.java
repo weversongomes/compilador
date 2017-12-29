@@ -3,6 +3,7 @@ package control.parser;
 import model.Escopo;
 import model.EscopoMetodo;
 import model.SemanticAnalyzer;
+import model.Symbol;
 
 /**
  * 
@@ -111,7 +112,7 @@ public class CommandParser {
 					panicModeAccess();
 				} 	
 			} else if (parser.tokensToRead() && parser.getTokensList().get(parser.index).lexeme.equals("(")) { // chamada a outro metodo da classe
-				if (recognizeMethodCall()) {
+				if (recognizeMethodCall(attrVar)) {
 					System.out.println("Chamada a metodo correta na linha " + parser.getTokensList().get(parser.index).line);
 					return true;
 				} else {
@@ -388,11 +389,57 @@ public class CommandParser {
 		return true;
 	}
 	
+	// reconhece o conteudo a ser lido nos parametros do metodo
+	public boolean recognizeParamContent(String methodName) {
+		boolean isFirstVariable = true;
+		String param;
+		int indexParam = 0;
+		while (parser.tokensToRead() && !parser.getTokensList().get(parser.index).lexeme.equals(")")) {
+			if (isFirstVariable) { // se for a primeira leitura, nao tem virgula antes
+				if (parser.getTokensList().get(parser.index).type.equals("ID")) {
+					//--------Semantico---------
+					param = parser.getTokensList().get(parser.index).lexeme;
+					EscopoMetodo escopoMetodoReferenciado = new EscopoMetodo();
+					escopoMetodoReferenciado.name = methodName;
+					escopoMetodoReferenciado = (EscopoMetodo) parser.escopos.get(parser.escopos.indexOf(escopoMetodoReferenciado));
+					System.out.println(SemanticAnalyzer.validateMethodParams(param, escopo, escopoMetodoReferenciado, indexParam, parser.getTokensList().get(parser.index).line));
+					indexParam++;
+					//--------------------------
+					isFirstVariable = false; // se tiver proxima leitura, nao sera mais a primeira
+					parser.index = parser.index + 1;
+				} else {
+					return false;
+				}
+			} else {
+				if (parser.getTokensList().get(parser.index).lexeme.equals(",")) { // verificar se as leituras estao separadas por virgula
+					parser.index = parser.index + 1;
+				} else {
+					return false;
+				}
+				if (parser.tokensToRead() && (parser.getTokensList().get(parser.index).type.equals("ID"))) {
+					//--------Semantico---------
+					param = parser.getTokensList().get(parser.index).lexeme;
+					EscopoMetodo escopoMetodoReferenciado = new EscopoMetodo();
+					escopoMetodoReferenciado.name = methodName;
+					escopoMetodoReferenciado = (EscopoMetodo) parser.escopos.get(parser.escopos.indexOf(escopoMetodoReferenciado));
+					System.out.println(SemanticAnalyzer.validateMethodParams(param, escopo, escopoMetodoReferenciado, indexParam, parser.getTokensList().get(parser.index).line));
+					indexParam++;
+					//--------------------------
+					parser.index = parser.index + 1;
+				} else {
+					return false;
+				}
+			}
+		}
+		parser.index = parser.index - 1; // achou o ")", entao a leitura continua a partir dele
+		return true;
+	}
+	
 	// reconhece a chamada a metodos dentro de outro metodo
-	public boolean recognizeMethodCall() {
+	public boolean recognizeMethodCall(String methodName) {
 		if (parser.tokensToRead() && parser.getTokensList().get(parser.index).lexeme.equals("(")) {
 			parser.index = parser.index + 1;
-			if (parser.tokensToRead() && recognizeScanContent()) {
+			if (parser.tokensToRead() && recognizeParamContent(methodName)) {
 				parser.index = parser.index + 1;
 				if (parser.tokensToRead() && parser.getTokensList().get(parser.index).lexeme.equals(")")) {
 					parser.index = parser.index + 1;
