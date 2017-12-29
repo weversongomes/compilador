@@ -1,24 +1,33 @@
-final int x = 10;
+int[3] a, b, c;
+a[2] = false;
+float[4][5][2] d;
+string s;
+final bool x = 3;
 
-class Classe1 : Classe2 {	
-	final float c, d, e;
-	
-	int doSomething (string xxx, bool yyy) {	
-		bool a, b, c;
-		a = true;
+class Classe1 : Classe2 {
+	bool varX;
+	varX = false;
+	int[3][4] aaaa, bbbb;
+	float[50] ffff;
+	ffff[20] = 5.2;
+	final float k = 9.5;
+	int doSomething (string xxx, bool yyy) {
+		float[5][4] opq, rst, uvx;
+		rst[3][3] = 9.5;
+		opq[4][3] = 3.5;	
 		int[10] teste0;
-		teste0 = 546;
+		teste0[9] = 546;
 		string st;
 		st = "Exemplo";
 		int k;
 		k = -50;
 		float j;
 		j = -12.34;
-		float[4][5] var1, var2;
-		var1 = 123.000;
+		float[4][5][3][10][333] var1, var2;
+		var1[3][4][2][9][332] = 123.000;
 		int i;
-		i = g / h + a - b * c % d;
 		int x, y;
+		bool a;
 		
 		metodo1();
 		

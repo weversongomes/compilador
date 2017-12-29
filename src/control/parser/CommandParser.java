@@ -58,16 +58,23 @@ public class CommandParser {
 			String varType = parser.getTokensList().get(parser.index).lexeme;
 			String attrVar = varType;
 			parser.index = parser.index + 1;
+			if (parser.tokensToRead() && new VariableParser(parser).recognizeVector()) { // verifica se eh vetor ou matriz
+				parser.index = parser.index + 1;
+			}
 			if (parser.tokensToRead() && parser.getTokensList().get(parser.index).lexeme.equals("=")) { // inicializacao de variavel local
-				
-				parser.index = parser.index - 1; // para comecar a varredura de inicializacao de variavel pelo id
-				if (!new VariableParser(parser).recognizeInitialization(false, varType)) { // verifica se a atribuicao esta correta
+				String auxVar = ""; 
+				while (!parser.getTokensList().get(parser.index).type.equals("ID")) {
+					parser.index = parser.index - 1; // para comecar a varredura de inicializacao de variavel pelo id
+					auxVar = parser.getTokensList().get(parser.index).lexeme + auxVar; // caso seja vetor ou matriz, adiciona as dimensoes ao id: ID [NUM][NUM]
+				}
+				attrVar = auxVar;
+				if (!new VariableParser(parser).recognizeInitialization(false, varType, escopo)) { // verifica se a atribuicao esta correta
 					panicModeLocalVariableInitialization();
 				} else {
 					if (SemanticAnalyzer.checkType(attrVar, parser.getTokensList().get(parser.index).lexeme, escopo).equals("ok")) {
-						System.out.println("tipos compativeis");
+						System.out.println("tipo compativel na linha " + parser.getTokensList().get(parser.index).line);
 					} else {
-						System.out.println("tipos imcompativeis");
+						System.out.println("tipo incompativel na linha " + parser.getTokensList().get(parser.index).line);
 					}
 					
 					parser.index = parser.index + 1;
@@ -75,14 +82,14 @@ public class CommandParser {
 						
 						System.out.println("Inicializacao de variavel local correta na linha " + parser.getTokensList().get(parser.index).line);
 						return true;
-					} else if (parser.tokensToRead() && parser.getTokensList().get(parser.index).type.equals("ARIOP")) { // inicializacao com operacao aritmetica
+/*					} else if (parser.tokensToRead() && parser.getTokensList().get(parser.index).type.equals("ARIOP")) { // inicializacao com operacao aritmetica
 						parser.index = parser.index + 1;
 						if (parser.tokensToRead() && new OperationParser(parser, escopo).recognizeArithmeticOperation()) {
 							System.out.println("Inicializacao de variavel local com operacao aritmetica correta na linha " + parser.getTokensList().get(parser.index).line);
 							return true;
 						} else {
 							panicModeLocalVariableInitialization();
-						}
+						}*/
 					} else {
 						panicModeLocalVariableInitialization();
 					}
@@ -111,11 +118,9 @@ public class CommandParser {
 					panicModeMethodCall();
 				}
 			} else { // declaracao de variavel local
-				if (parser.tokensToRead() && new VariableParser(parser).recognizeVector()) { // verifica se eh vetor ou matriz
-					parser.index = parser.index + 1;
-				}
 				if (parser.tokensToRead() && parser.getTokensList().get(parser.index).type.equals("ID")) {
 					varType = parser.getTokensList().get(parser.index - 1).lexeme;
+					varType = parser.isVector(varType); // caso seja um vetor ou matriz, o tipo sera <TIPO>[NUM]*
 					parser.index = parser.index + 1;
 					if (parser.tokensToRead() && (parser.getTokensList().get(parser.index).lexeme.equals(";") || parser.getTokensList().get(parser.index).lexeme.equals(","))) {
 						parser.index = parser.index - 1; // para comecar a varredura da estrutura de declaracao de variavel a partir do id
@@ -141,7 +146,7 @@ public class CommandParser {
 		while (forIndex < forStructure.length) {
 			if (parser.tokensToRead()) {
 				if (forIndex == 2) { // verifica se a inicializacao do for esta correta
-					if (!new VariableParser(parser).recognizeInitialization(false, null)) {
+					if (!new VariableParser(parser).recognizeInitialization(false, null, escopo)) {
 						isCorrect = false;
 					}
 					forIndex++;
@@ -180,9 +185,6 @@ public class CommandParser {
 					forIndex++;
 				}
 			}
-			//if (!isCorrect) {
-				//forparser.index = parser.index + 1;
-			//}		
 		}
 		return isCorrect;	
 	}
@@ -241,10 +243,7 @@ public class CommandParser {
 					}
 					ifIndex++;
 				}
-			}
-			//if (!isCorrect) {
-				//forparser.index = parser.index + 1;
-			//}		
+			}	
 		}
 		return isCorrect;
 	}
@@ -277,9 +276,6 @@ public class CommandParser {
 					elseIndex++;
 				}
 			}
-			//if (!isCorrect) {
-				//forparser.index = parser.index + 1;
-			//}		
 		}
 		return isCorrect;
 	}
@@ -306,9 +302,6 @@ public class CommandParser {
 					printIndex++;
 				}
 			}
-			//if (!isCorrect) {
-				//forparser.index = parser.index + 1;
-			//}		
 		}
 		return isCorrect;
 	}
@@ -363,9 +356,6 @@ public class CommandParser {
 					scanIndex++;
 				}
 			}
-			//if (!isCorrect) {
-				//forparser.index = parser.index + 1;
-			//}		
 		}
 		return isCorrect;
 	}
@@ -456,17 +446,10 @@ public class CommandParser {
 	
 	public void panicModeFor() {
 		parser.addError("ERRO: Estrutura 'for' mal formada na linha " + parser.getTokensList().get(parser.index - 1).line);
-/*		while (parser.tokensToRead() && !forSyncparser.getTokensList().contains(parser.getTokensList().get(parser.index).lexeme)) { // ps.: verificar tambem se nao eh atribuicao ou operacao
-			parser.index = parser.index + 1;
-		}*/
-		//parser.setIndex(parser.index - 1);
 	}
 	
 	public void panicModeIf() {
 		parser.addError("ERRO: Estrutura 'if' mal formada na linha " + parser.getTokensList().get(parser.index - 1).line);
-/*		while (parser.tokensToRead() && !ifSyncTokens.contains(parser.getTokensList().get(parser.index).lexeme)) {
-			parser.index = parser.index + 1;
-		}*/
 	}
 	
 	public void panicModePrint() {

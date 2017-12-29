@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import model.Escopo;
 import model.EscopoClasse;
 import model.EscopoGlobal;
+import model.SemanticAnalyzer;
 import model.Symbol;
 import model.Token;
 
@@ -108,9 +109,6 @@ public class FileParser {
 					classIndex++;
 				}
 			}
-			//if (!isCorrect) {
-				//forIndex++;
-			//}		
 		}
 		return isCorrect;
 	}
@@ -118,13 +116,27 @@ public class FileParser {
 	// reconhece a estrutura sintatica de uma variavel global
 	public boolean recognizeGlobalVariable(boolean isConstant) {
 		String varType = tokensList.get(index).lexeme;
-		if (isAttributeType() || tokensList.get(index).type.equals("ID")) {
+		String attrVar = varType;
+		if (tokensList.get(index).type.equals("ID") && !isConstant) { // inicializacao de variavel global
 			index++;
-			if (tokensToRead() && tokensList.get(index).lexeme.equals("=")) { // inicializacao de variavel global
-				index--; // para comecar a varredura de inicializacao de variavel pelo id
-				if (!new VariableParser(this).recognizeInitialization(false, varType)) { // verifica se a atribuicao esta correta
+			if (tokensToRead() && new VariableParser(this).recognizeVector()) { // verifica se eh vetor ou matriz
+				index++;
+			}
+			if (tokensToRead() && tokensList.get(index).lexeme.equals("=")) {
+				String auxVar = ""; 
+				while (!tokensList.get(index).type.equals("ID")) {
+					index--; // para comecar a varredura de inicializacao de variavel pelo id
+					auxVar = tokensList.get(index).lexeme + auxVar; // caso seja vetor ou matriz, adiciona as dimensoes ao id: ID [NUM][NUM]
+				}
+				attrVar = auxVar;
+				if (!new VariableParser(this).recognizeInitialization(false, varType, eg)) { // verifica se a atribuicao esta correta
 					panicModeGlobalVariableInitialization();
 				} else {
+					if (SemanticAnalyzer.checkType(attrVar, tokensList.get(index).lexeme, eg).equals("ok")) {
+						System.out.println("tipo compativel na linha " + tokensList.get(index).line);
+					} else {
+						System.out.println("tipo incompativel na linha " + tokensList.get(index).line);
+					}
 					index++;
 					if (tokensToRead() && tokensList.get(index).lexeme.equals(";")) { // inicializacao
 						System.out.println("Inicializacao de variavel global correta na linha " + tokensList.get(index).line);
@@ -141,37 +153,41 @@ public class FileParser {
 						panicModeGlobalVariableInitialization();
 					}
 				}
-			} else { // declaracao de variavel global
-				if (tokensToRead() && new VariableParser(this).recognizeVector()) { // verifica se eh vetor ou matriz
-					index++;
-				}
-				if (tokensToRead() && tokensList.get(index).type.equals("ID")) {
-					String simbol = tokensList.get(index).lexeme;
-					index++;
-					/*if (tokensToRead() && (tokensList.get(index).lexeme.equals(";") || tokensList.get(index).lexeme.equals(","))) {
-						index--; // para comecar a varredura da estrutura de declaracao de variavel a partir do id
-						if (!new VariableParser(this).recognizeVariableDeclaration()) {
-							panicModeGlobalVariableDeclaration();
-						} else {
-							System.out.println("Declaracao de variavel global correta na linha " + tokensList.get(index).line);
-							return true;
-						}
-					}*/
-					if (tokensToRead() && (tokensList.get(index).lexeme.equals("="))) {
-						index--; // para comecar a varredura da estrutura de declaracao de variavel a partir do id
-						if (!new VariableParser(this).recognizeInitialization(true, varType)) {
-							panicModeGlobalVariableDeclaration();
-						} else {
-							System.out.println("Declaracao de variavel global correta na linha " + tokensList.get(index).line);
-							return true;
-						}
-					} else {
+			} else {
+				panicModeGlobalVariableDeclaration();
+			}
+		} else if (isAttributeType()) { // declaracao de variavel global ou constante
+			index++;
+			if (tokensToRead() && new VariableParser(this).recognizeVector() && !isConstant) { // verifica se eh vetor ou matriz
+				index++;
+			}
+			if (tokensToRead() && tokensList.get(index).type.equals("ID")) {
+				varType = tokensList.get(index - 1).lexeme;
+				varType = isVector(varType); // caso seja um vetor ou matriz, o tipo sera <TIPO>[NUM]*
+				index++;
+				if (tokensToRead() && (tokensList.get(index).lexeme.equals(";") || tokensList.get(index).lexeme.equals(",")) && !isConstant) {
+					index--; // para comecar a varredura da estrutura de declaracao de variavel a partir do id
+					if (!new VariableParser(this).recognizeVariableDeclaration(varType, eg, false)) {
 						panicModeGlobalVariableDeclaration();
+					} else {
+						System.out.println("Declaracao de variavel local correta na linha " + tokensList.get(index).line);
+						return true;
 					}
-				} 
-				//else {
-					//panicModeGlobalVariableDeclaration();
-				//}
+				} else if (tokensToRead() && tokensList.get(index).lexeme.equals("=") && isConstant) { // constante
+					index--; // para comecar a varredura da estrutura de declaracao e inicializacao de constante a partir do id
+					if (!new VariableParser(this).recognizeInitialization(true, varType, eg)) {
+						panicModeGlobalVariableInitialization();
+					} else {
+						index++;
+						
+						if (tokensToRead() && tokensList.get(index).lexeme.equals(";")) {
+							System.out.println("Declaracao de constante correta na linha " + tokensList.get(index).line);
+							return true;
+						}
+					}
+				} else {
+					panicModeGlobalVariableDeclaration();
+				}
 			}
 		}
 		return false;
@@ -222,6 +238,19 @@ public class FileParser {
 		}
 		
 		return false;
+	}
+	
+	public String isVector(String varType) { // caso seja um vetor ou matriz, a string eh montada: <tipo><dimensoes>
+		if (varType.equals("]")) {
+			int auxIndex = index - 1;
+			varType = "";
+			while (!tokensList.get(auxIndex).type.equals("RES")) {
+				varType = tokensList.get(auxIndex).lexeme + varType;
+				auxIndex--;
+			}
+			varType = tokensList.get(auxIndex).lexeme + varType;
+		}
+		return varType;
 	}
 
 }

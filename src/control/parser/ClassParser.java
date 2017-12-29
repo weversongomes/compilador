@@ -1,6 +1,7 @@
 package control.parser;
 
 import model.EscopoClasse;
+import model.SemanticAnalyzer;
 import model.Symbol;
 
 /**
@@ -28,33 +29,40 @@ public class ClassParser {
 		}
 		if (fileParser.tokensToRead() && (fileParser.isAttributeType() || fileParser.getTokensList().get(fileParser.index).type.equals("ID"))) {
 			String varType = fileParser.getTokensList().get(fileParser.index).lexeme;
+			String attrVar = varType;
 			fileParser.index = fileParser.index + 1;
-			if (fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index).lexeme.equals("=") && isVector == false && isFinal == false) { // inicializacao de atributo
-				fileParser.index = fileParser.index - 1; // para comecar a varredura de inicializacao de variavel pelo id
-				if (!new VariableParser(fileParser).recognizeInitialization(false, varType)) { // verifica se a atribuicao esta correta
+			if (fileParser.tokensToRead() && new VariableParser(fileParser).recognizeVector() && isFinal == false) { // verifica se eh vetor ou matriz
+				isVector = true;
+				fileParser.index = fileParser.index + 1;
+			}
+			if (fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index).lexeme.equals("=") && isFinal == false) { // inicializacao de atributo
+				String auxVar = ""; 
+				while (!fileParser.getTokensList().get(fileParser.index).type.equals("ID")) {
+					fileParser.index = fileParser.index - 1; // para comecar a varredura de inicializacao de variavel pelo id
+					auxVar = fileParser.getTokensList().get(fileParser.index).lexeme + auxVar; // caso seja vetor ou matriz, adiciona as dimensoes ao id: ID [NUM][NUM]
+				}
+				attrVar = auxVar;
+				if (!new VariableParser(fileParser).recognizeInitialization(false, varType, ec)) { // verifica se a atribuicao esta correta
 					panicModeAttributeInitialization();
 				} else {
-					fileParser.index = fileParser.index + 1;
-					if (fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index).lexeme.equals(";")) { // inicializacao
-						System.out.println("Inicializacao de atributo correta na linha " + fileParser.getTokensList().get(fileParser.index).line);
-						return true;
-/*					} else if (fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index).type.equals("ARIOP")) { // inicializacao com operacao aritmetica
+					if (SemanticAnalyzer.checkType(attrVar, fileParser.getTokensList().get(fileParser.index).lexeme, ec).equals("ok")) {
+						System.out.println("tipo compativel na linha " + fileParser.getTokensList().get(fileParser.index).line);
 						fileParser.index = fileParser.index + 1;
-						if (fileParser.tokensToRead() && new OperationParser(fileParser).recognizeArithmeticOperation()) {
-							System.out.println("Inicializacao de atributo com operacao aritmetica correta na linha " + fileParser.getTokensList().get(fileParser.index).line);
+						if (fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index).lexeme.equals(";")) { // inicializacao
+							System.out.println("Inicializacao de atributo correta na linha " + fileParser.getTokensList().get(fileParser.index).line);
 							return true;
 						} else {
 							panicModeAttributeInitialization();
-						}*/
+						}
 					} else {
-						panicModeAttributeInitialization();
+						System.out.println("tipo incompativel na linha " + fileParser.getTokensList().get(fileParser.index).line);
 					}
 				}
 			} else { // declaracao de atributo ou metodo
-				if (fileParser.tokensToRead() && new VariableParser(fileParser).recognizeVector()) { // verifica se eh vetor ou matriz
+/*				if (fileParser.tokensToRead() && new VariableParser(fileParser).recognizeVector()) { // verifica se eh vetor ou matriz
 					isVector = true;
 					fileParser.index = fileParser.index + 1;
-				}
+				}*/
 				if (fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index).lexeme.equals("main") && isVector == false && isFinal == false) { // declaracao da main nao pode ter vetor nem final
 					fileParser.index = fileParser.index - 1;
 					MethodParser mParser = new MethodParser(fileParser, ec);
@@ -82,14 +90,27 @@ public class ClassParser {
 							//mParser.em.showSimbols();
 							return true;
 						}
-					} else if (fileParser.getTokensList().get(fileParser.index).lexeme.equals(";") || fileParser.getTokensList().get(fileParser.index).lexeme.equals(",")) { // declaracao de variavel
+					} else if (isFinal == false && (fileParser.getTokensList().get(fileParser.index).lexeme.equals(";") || fileParser.getTokensList().get(fileParser.index).lexeme.equals(","))) { // declaracao de variavel
 						fileParser.index = fileParser.index - 1; // para comecar a varredura da estrutura de declaracao de variavel a partir do nome
 						varType = fileParser.getTokensList().get(fileParser.index - 1).lexeme;
+						varType = fileParser.isVector(varType);
 						if (!new VariableParser(fileParser).recognizeVariableDeclaration(varType, ec, isFinal)) {
 							panicModeAttributeDeclaration();
 						} else {
 							System.out.println("Declaracao de atributo correta na linha " + fileParser.getTokensList().get(fileParser.index).line);
 							return true;
+						}
+					} else if (isFinal == true && fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index).lexeme.equals("=")) { // constante
+						fileParser.index = fileParser.index - 1; // para comecar a varredura da estrutura de declaracao e inicializacao de constante a partir do id
+						if (!new VariableParser(fileParser).recognizeInitialization(true, varType, ec)) {
+							panicModeConstant();
+						} else {
+							fileParser.index = fileParser.index + 1;
+							if (fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index).lexeme.equals(";")) {
+								System.out.println("Declaracao de constante correta na linha " + fileParser.getTokensList().get(fileParser.index).line);
+								//fileParser.index = fileParser.index + 1;
+								return true;
+							}
 						}
 					} else {
 						panicModeAttributeDeclaration();
@@ -112,6 +133,10 @@ public class ClassParser {
 
 	public void panicModeMethod() {
 		fileParser.addError("ERRO: Metodo mal formado na linha " + fileParser.getTokensList().get(fileParser.index-1).line);
+	}
+	
+	public void panicModeConstant() {
+		fileParser.addError("ERRO: Constante mal formada na linha " + fileParser.getTokensList().get(fileParser.index-1).line);
 	}
 	
 }

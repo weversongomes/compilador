@@ -54,23 +54,27 @@ public class VariableParser {
 	}
 	
 	// reconhece a a estrutura sintatica de inicializacao de uma variavel global, atributo ou local
-	public boolean recognizeInitialization(boolean isConstant, String varType) {
+	public boolean recognizeInitialization(boolean isConstant, String varType, Escopo escopo) {
 		if (fileParser.getTokensList().get(fileParser.index).type.equals("ID")) {
 			String simbolName = fileParser.getTokensList().get(fileParser.index).lexeme;
 			fileParser.index = fileParser.index + 1;
+			if (recognizeVector() && !isConstant) {
+				fileParser.index = fileParser.index + 1;
+			}
 			if (fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index).lexeme.equals("=")) {
 				fileParser.index = fileParser.index + 1;
-				if (isConstant) {
-					Symbol symbol = new Symbol();
-					symbol.name = simbolName;
-					symbol.type = varType;
-					symbol.isConstant = true;
-					fileParser.eg.addSimbol(symbol);
-					String simbolValue = fileParser.getTokensList().get(fileParser.index).lexeme;
-					fileParser.eg.setSimbolValue(simbolName, simbolValue);
-				}
 				if (fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index).type.equals("ID") || fileParser.getTokensList().get(fileParser.index).type.equals("NUM") || fileParser.getTokensList().get(fileParser.index).type.equals("STR") || 
 						fileParser.getTokensList().get(fileParser.index).lexeme.equals("true") || fileParser.getTokensList().get(fileParser.index).lexeme.equals("false")) {
+					if (isConstant) {
+						Symbol symbol = new Symbol();
+						symbol.name = simbolName;
+						symbol.type = varType;
+						symbol.isConstant = true;
+						symbol.value = fileParser.getTokensList().get(fileParser.index).lexeme;
+						escopo.addSimbol(symbol);
+						//String simbolValue = fileParser.getTokensList().get(fileParser.index).lexeme;
+						//fileParser.eg.setSimbolValue(simbolName, simbolValue);
+					}
 					return true;
 				}
 			}
@@ -85,7 +89,7 @@ public class VariableParser {
 			if (fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index).type.equals("NUM")) {
 				fileParser.index = fileParser.index + 1;
 				if (fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index).lexeme.equals("]")) {
-					if (fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index+1).lexeme.equals("[")) {
+/*					if (fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index+1).lexeme.equals("[")) {
 						fileParser.index = fileParser.index + 2;
 						if (fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index).type.equals("NUM")) {
 							fileParser.index = fileParser.index + 1;
@@ -95,6 +99,12 @@ public class VariableParser {
 						}
 					} else {
 						return true; // eh um vetor (1 dimensao)
+					}*/
+					if (fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index+1).lexeme.equals("[")) {
+						fileParser.index = fileParser.index + 1;
+						return recognizeVector();
+					} else {
+						return true;
 					}
 				}
 			}

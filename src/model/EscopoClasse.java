@@ -25,10 +25,10 @@ public class EscopoClasse extends Escopo {
 	}
 	
 	public void showSimbols() {
-		System.out.println("SIMBOLOS ESCOPO CLASSE");
+/*		System.out.println("SIMBOLOS ESCOPO CLASSE");
 		for (Symbol s : symbols) {
 			System.out.println(s.name + " - " + s.value + " - " + s.type + " - " + s.isConstant);
-		}
+		}*/
 	}
 	
 	public Escopo getEscopoPai() {
