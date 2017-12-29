@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class Escopo {
 	public String type;
 	private ArrayList<Symbol> symbols;
+	public String name = "";
 	
 	public Escopo() {
 		symbols = new ArrayList<Symbol>();
@@ -25,4 +26,12 @@ public class Escopo {
 	 * SOBRESCREVER NA CLASSE HERDEIRA
 	 */
 	public void showSimbols() {}
+	
+	public boolean equals(Object obj) {
+		Escopo escopo = (Escopo) obj;
+		String name = escopo.name;
+        if (name.equals(this.name))
+        	return true;
+        return false;
+    }
 }

@@ -71,10 +71,12 @@ public class ClassParser {
 						return true;
 					}
 				} else if (fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index).type.equals("ID")) {
+					String methodName = fileParser.getTokensList().get(fileParser.index).lexeme;
 					fileParser.index = fileParser.index + 1;
 					if (fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index).lexeme.equals("(") && isVector == false && isFinal == false) { // declaracao de metodo nao pode ter vetor nem final
 						fileParser.index = fileParser.index - 2; // para comecar a varredura da estrutura do metodo a partir do tipo de retorno
 						MethodParser mParser = new MethodParser(fileParser, ec);
+						mParser.setMethodName(methodName);
 						if (!mParser.recognizeMethod(varType)) {
 							panicModeMethod();
 						} else {

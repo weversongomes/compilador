@@ -6,7 +6,7 @@ public class EscopoMetodo extends Escopo {
 	public EscopoClasse escopoPai;
 	private ArrayList<Symbol> symbols;
 	private ArrayList<String> params;
-	
+
 	public EscopoMetodo() {
 		type = "metodo";
 		symbols = new ArrayList<Symbol>();

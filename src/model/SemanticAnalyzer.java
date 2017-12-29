@@ -82,19 +82,54 @@ public class SemanticAnalyzer {
 		return "ok";
 	}
 	
-	private static boolean isBool(String value) {
+	public static boolean isBool(String value) {
 		return value.equals("true") || value.equals("false");
 	}
 	
-	private static boolean isInt(String value) {
+	public static boolean isInt(String value) {
 		return value.matches("^-?\\d+$");
 	}
 	
-	private static boolean isFloat(String value) {
+	public static boolean isFloat(String value) {
 		return value.matches("^-?\\d*\\.?\\d*");
 	}
 	
-	private static boolean isString(String value) { // eh necessario verificar se a string esta formada corretamente, com as aspas corretas, por ex 
+	public static boolean isString(String value) { // eh necessario verificar se a string esta formada corretamente, com as aspas corretas, por ex 
 		return true;
+	}
+	
+	public static String validateMethodParams(String pParam, EscopoMetodo escopo, int indexParam, int line) {
+		try {
+			String methodParam = escopo.getParams().get(indexParam);
+			Symbol symbol = new Symbol();
+			symbol.name = methodParam;
+			String methodParamType = escopo.getSimbols().get(escopo.getSimbols().indexOf(symbol)).type;
+			if (methodParamType.equals("bool")) {
+				Symbol auxsymbol = new Symbol();
+				auxsymbol.name = pParam;
+				String paramType;
+				if (escopo.getSimbols().indexOf(auxsymbol) == -1) {//verifica no escopo de metodo
+					if (escopo.escopoPai.getSimbols().indexOf(auxsymbol) == -1) {////verifica no escopo de classe
+						if (escopo.escopoPai.escopoPai.getSimbols().indexOf(auxsymbol) == -1) {//verifica no escopo global
+							return "ERRO SEMANTICO: O parametro passado na linha " + line + " nao foi declarado";
+						} else {
+							paramType = escopo.escopoPai.escopoPai.getSimbols().get(escopo.escopoPai.escopoPai.getSimbols().indexOf(auxsymbol)).type;
+						}
+					} else {
+						paramType = escopo.escopoPai.getSimbols().get(escopo.escopoPai.getSimbols().indexOf(auxsymbol)).type;
+					}
+				} else {
+					paramType = escopo.getSimbols().get(escopo.getSimbols().indexOf(auxsymbol)).type;
+				}
+				
+				if (!SemanticAnalyzer.isBool(pParam) && !paramType.equals("bool")) {
+					return "ERRO SEMANTICO: O parametro passado nao e' do tipo bool na linha " + line;
+				}
+			}
+		} catch (IndexOutOfBoundsException e) {
+			e.printStackTrace();
+			return "ERRO SEMANTICO: Chamada imcompativel de metodo na linha " + line;
+		}
+		return "Chamada de metodo semanticamente correta na linha " + line;
 	}
 }

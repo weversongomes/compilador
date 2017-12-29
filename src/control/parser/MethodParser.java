@@ -136,6 +136,10 @@ public class MethodParser {
 		return true;
 	}
 	
+	public void setMethodName(String methodName) {
+		em.name = methodName;
+	}
+	
 	// reconhece a estrutura sintatica do retorno de um metodo
 	public boolean recognizeMethodReturn() {
 		boolean isCorrect = true;
