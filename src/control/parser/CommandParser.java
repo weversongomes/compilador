@@ -412,7 +412,7 @@ public class CommandParser {
 					EscopoMetodo escopoMetodoReferenciado = new EscopoMetodo();
 					escopoMetodoReferenciado.name = methodName;
 					escopoMetodoReferenciado = (EscopoMetodo) parser.escopos.get(parser.escopos.indexOf(escopoMetodoReferenciado));
-					System.out.println(SemanticAnalyzer.validateMethodParams(param, escopoMetodoReferenciado, indexParam, parser.getTokensList().get(parser.index).line));
+					System.out.println(SemanticAnalyzer.validateMethodParams(param, escopo, escopoMetodoReferenciado, indexParam, parser.getTokensList().get(parser.index).line));
 					indexParam++;
 					//--------------------------
 					isFirstVariable = false; // se tiver proxima leitura, nao sera mais a primeira
@@ -432,7 +432,7 @@ public class CommandParser {
 					EscopoMetodo escopoMetodoReferenciado = new EscopoMetodo();
 					escopoMetodoReferenciado.name = methodName;
 					escopoMetodoReferenciado = (EscopoMetodo) parser.escopos.get(parser.escopos.indexOf(escopoMetodoReferenciado));
-					System.out.println(SemanticAnalyzer.validateMethodParams(param, escopoMetodoReferenciado, indexParam, parser.getTokensList().get(parser.index).line));
+					System.out.println(SemanticAnalyzer.validateMethodParams(param, escopo, escopoMetodoReferenciado, indexParam, parser.getTokensList().get(parser.index).line));
 					indexParam++;
 					//--------------------------
 					parser.index = parser.index + 1;
