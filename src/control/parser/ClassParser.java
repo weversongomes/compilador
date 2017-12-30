@@ -81,7 +81,9 @@ public class ClassParser {
 						symbol.type = "metodo";
 						symbol.value = "bool";
 						symbol.isConstant = isFinal;
-						ec.addSimbol(symbol);
+						if (ec.addSimbol(symbol) == 0) {
+							System.out.println("ERRO SEMANTICO: Identificador duplicado na linha " + fileParser.getTokensList().get(fileParser.index).line);
+						}
 						System.out.println("Main correta na linha " + fileParser.getTokensList().get(fileParser.index).line);
 						return true;
 					}

@@ -26,7 +26,9 @@ public class VariableParser {
 					symbol.name = fileParser.getTokensList().get(fileParser.index).lexeme;
 					symbol.type = varType;
 					symbol.isConstant = isConstant;
-					escopo.addSimbol(symbol);
+					if (escopo.addSimbol(symbol) == 0) {
+						System.out.println("ERRO SEMANTICO: Identificador duplicado na linha " + fileParser.getTokensList().get(fileParser.index).line);
+					}
 					fileParser.index = fileParser.index + 1;
 					isFirstVariable = false;
 				} else {

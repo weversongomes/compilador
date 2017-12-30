@@ -40,7 +40,6 @@ public class MethodParser {
 					}
 					symbol.type = "metodo";
 					symbol.value = varType;
-					escopoPai.addSimbol(symbol);
 					methodIndex++;
 					parser.index = parser.index + 1;
 				} else if (methodIndex == 1) { // verifica se o nome do metodo eh valido
@@ -48,6 +47,9 @@ public class MethodParser {
 						isCorrect = false;
 					}
 					symbol.name = parser.getTokensList().get(parser.index).lexeme;
+					if (escopoPai.addSimbol(symbol) == 0) {
+						System.out.println("ERRO SEMANTICO: Identificador de metodo duplicado na linha " + parser.getTokensList().get(parser.index).line);
+					}
 					methodIndex++;
 					parser.index = parser.index + 1;
 				} else if (methodIndex == 3) { // verifica se os parametros do metodo estao corretos
