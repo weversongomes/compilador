@@ -51,4 +51,24 @@ public class EscopoGlobal extends Escopo {
 	public ArrayList<Symbol> getSimbols() {
 		return this.symbols;
 	}
+	
+	public void setSymbolParent(Symbol symbol) {
+		if (symbols.contains(symbol)) {
+			symbol = symbols.get(symbols.indexOf(symbol));
+			symbol.hasParent = true;
+		} else {
+			System.out.println("----- OBJETO NAO ENCONTRADO");
+		}
+	}
+	
+	public Symbol getSymbol(String symbolName) {
+		Symbol symbol = new Symbol();
+		symbol.name = symbolName;
+		if (symbols.contains(symbol)) {
+			symbol = symbols.get(symbols.indexOf(symbol));
+			return symbol;
+		}
+		return null;
+	}
+	
 }

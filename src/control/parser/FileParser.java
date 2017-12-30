@@ -59,16 +59,17 @@ public class FileParser {
 	public boolean recognizeClass() {
 		boolean isCorrect = true;
 		int classIndex = 0;
+		Symbol childClass = null, parentClass = null;
 		while (classIndex < classStructure.length) {
 			if (tokensToRead()) {
 				if (classIndex == 1) { // verifica se eh um nome de classe valido
 					if (!tokensList.get(index).type.equals("ID")) {
 						isCorrect = false;
 					}
-					Symbol symbol = new Symbol();
-					symbol.name = getTokensList().get(index).lexeme;
-					symbol.type = "class";
-					if (eg.addSimbol(symbol) == 0) {
+					childClass = new Symbol();
+					childClass.name = getTokensList().get(index).lexeme;
+					childClass.type = "class";
+					if (eg.addSimbol(childClass) == 0) {
 						System.out.println("ERRO SEMANTICO: Identificador duplicado na linha " + getTokensList().get(index).line);
 					}
 					classIndex++;
@@ -78,6 +79,22 @@ public class FileParser {
 						index++;
 						if (tokensToRead() && !tokensList.get(index).type.equals("ID")) {
 							isCorrect = false;
+						} else {
+							parentClass = eg.getSymbol(getTokensList().get(index).lexeme);
+							if (parentClass != null) {
+								if (!eg.getSimbols().contains(parentClass)) {
+									System.out.println("ERRO SEMANTICO: Classe pai da heranca nao existe na linha " + getTokensList().get(index).line);
+								} else {
+									if (parentClass.hasParent == true) {
+										System.out.println("ERRO SEMANTICO: Existe heranca em cadeia na linha " + getTokensList().get(index).line);
+									} else {
+										System.out.println("HERANÇA CORRETA NA LINHA " + getTokensList().get(index).line);
+									}
+									eg.setSymbolParent(childClass); // indica que esta classe eh filha de uma classe pai
+								}
+							} else {
+								System.out.println("ERRO SEMANTICO: Classe pai da heranca nao existe na linha " + getTokensList().get(index).line);
+							}
 						}
 					} else if (!tokensList.get(index).lexeme.equals("{")) {
 						isCorrect = false;

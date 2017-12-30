@@ -1,13 +1,8 @@
-string[5][3] s1, s2, s3;
-s1[1][2] = "abc";
-s2[3][2] = "def";
-s3[0][2] = "ghi";
-int[3] a, b, c;
-a[2] = false;
-float[4][5][2] d;
-string s;
-int mynum;
-final bool x = 3;
+class ClasseY {}
+
+class ClasseX : ClasseY {}
+
+class Classe2 : ClasseX {}
 
 class Classe1 : Classe2 {
 	string s1;

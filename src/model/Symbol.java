@@ -3,6 +3,7 @@ package model;
 public class Symbol {
 	public String name, value, type;
 	public boolean isConstant = false;
+	public boolean hasParent;
 	
 	public boolean equals(Object obj) {
 		Symbol symbol = (Symbol) obj;
