@@ -73,15 +73,15 @@ public class CommandParser {
 					panicModeLocalVariableInitialization();
 				} else {
 					if (SemanticAnalyzer.checkType(attrVar, parser.getTokensList().get(parser.index).lexeme, escopo).equals("ok")) {
-						System.out.println("tipo compativel na linha " + parser.getTokensList().get(parser.index).line);
+						System.out.println("SEMANTICO: Tipo compativel na linha " + parser.getTokensList().get(parser.index).line);
 					} else {
-						System.out.println("tipo incompativel na linha " + parser.getTokensList().get(parser.index).line);
+						System.out.println("ERRO SEMANTICO: Tipo incompativel na linha " + parser.getTokensList().get(parser.index).line);
 					}
 					
 					parser.index = parser.index + 1;
 					if (parser.tokensToRead() && parser.getTokensList().get(parser.index).lexeme.equals(";")) { // inicializacao
 						
-						System.out.println("Inicializacao de variavel local correta na linha " + parser.getTokensList().get(parser.index).line);
+						System.out.println("Atribuicao de variavel local correta na linha " + parser.getTokensList().get(parser.index).line);
 						return true;
 /*					} else if (parser.tokensToRead() && parser.getTokensList().get(parser.index).type.equals("ARIOP")) { // inicializacao com operacao aritmetica
 						parser.index = parser.index + 1;

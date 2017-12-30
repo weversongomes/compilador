@@ -68,7 +68,9 @@ public class FileParser {
 					Symbol symbol = new Symbol();
 					symbol.name = getTokensList().get(index).lexeme;
 					symbol.type = "class";
-					eg.addSimbol(symbol);
+					if (eg.addSimbol(symbol) == 0) {
+						System.out.println("ERRO SEMANTICO: Identificador duplicado na linha " + getTokensList().get(index).line);
+					}
 					classIndex++;
 					index++;
 				} else if (classIndex == 2) {
