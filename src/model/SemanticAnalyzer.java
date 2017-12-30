@@ -53,7 +53,9 @@ public class SemanticAnalyzer {
 				}
 			}
 		}
-		if (isBool(value)) { // verifica se eh um bool atribuido corretamente 
+	    if (varType[0].equals("string")) { 
+	        return "string"; 
+	    } else if (isBool(value)) { // verifica se eh um bool atribuido corretamente 
 			if (varType[0].equals("bool")) {
 				return "ok";
 			}
