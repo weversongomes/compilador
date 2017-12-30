@@ -22,6 +22,24 @@ public class Escopo {
 	public ArrayList<Symbol> getSimbols() {
 		return this.symbols;
 	}
+
+	/**
+	 * 
+	 * @param simbol
+	 * @param value
+	 * @return operation result
+	 */
+	public int setSimbolValue(String simbolName, String value) {
+		Symbol symbol = new Symbol();
+		symbol.name = simbolName;
+		if (symbols.contains(symbol)) {
+			symbol = symbols.get(symbols.indexOf(symbol));
+			symbol.value = value;
+		} else {
+			System.out.println("OBJETO NAO ENCONTRADO");
+		}
+		return 0;
+	}
 	
 	public Escopo getEscopoPai() {
 		return escopoPai;

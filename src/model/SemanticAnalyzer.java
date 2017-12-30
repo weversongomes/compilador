@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 public class SemanticAnalyzer {
 
 	
-	public static String checkType(String simbolName, String value, Escopo escopo) {
+	public static String checkType(String simbolName, String value, Escopo escopo, boolean update) {
 		Symbol symbol = new Symbol();
 		//symbol.name = simbolName;
 		String[] varName = splitVectorVariable(simbolName);
@@ -14,15 +14,24 @@ public class SemanticAnalyzer {
 		if (escopo.getSimbols().contains(symbol)) {
 			symbol = escopo.getSimbols().get(escopo.getSimbols().indexOf(symbol));
 			varType = splitVectorVariable(symbol.type);
+			if (update) {
+				escopo.setSimbolValue(simbolName, value);
+			}
 		} else {
 			try {
 				if (escopo.getEscopoPai().getSimbols().contains(symbol)) {
 					symbol = escopo.getEscopoPai().getSimbols().get(escopo.getEscopoPai().getSimbols().indexOf(symbol));
 					varType = splitVectorVariable(symbol.type);
+					if (update) {
+						escopo.getEscopoPai().setSimbolValue(simbolName, value);
+					}
 				} else {
 					if (escopo.getEscopoPai().getEscopoPai().getSimbols().contains(symbol)) {
 						symbol = escopo.getEscopoPai().getEscopoPai().getSimbols().get(escopo.getEscopoPai().getEscopoPai().getSimbols().indexOf(symbol));
 						varType = splitVectorVariable(symbol.type);
+						if (update) {
+							escopo.getEscopoPai().getEscopoPai().setSimbolValue(simbolName, value);
+						}
 					} else {
 						return "err1";
 					}
@@ -44,9 +53,7 @@ public class SemanticAnalyzer {
 				}
 			}
 		}
-		if (varType[0].equals("string")) {
-				return "string";
-		} else if (isBool(value)) { // verifica se eh um bool atribuido corretamente 
+		if (isBool(value)) { // verifica se eh um bool atribuido corretamente 
 			if (varType[0].equals("bool")) {
 				return "ok";
 			}
@@ -56,6 +63,10 @@ public class SemanticAnalyzer {
 			}
 		} else if (isFloat(value)) { // verifica se eh um float atribuido corretamente
 			if (varType[0].equals("float")) {
+				return "ok";
+			}
+		} else if (isString(value)) { // verifica se eh uma string atribuido corretamente
+			if (symbol.type.equals("string")) {
 				return "ok";
 			}
 		}

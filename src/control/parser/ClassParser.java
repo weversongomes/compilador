@@ -45,7 +45,7 @@ public class ClassParser {
 				if (!new VariableParser(fileParser).recognizeInitialization(false, varType, ec)) { // verifica se a atribuicao esta correta
 					panicModeAttributeInitialization();
 				} else {
-					String checkType = SemanticAnalyzer.checkType(attrVar, fileParser.getTokensList().get(fileParser.index).lexeme, ec);
+					String checkType = SemanticAnalyzer.checkType(attrVar, fileParser.getTokensList().get(fileParser.index).lexeme, ec, true);
 					if (checkType.equals("ok")) {
 						System.out.println("tipo compativel na linha " + fileParser.getTokensList().get(fileParser.index).line);
 					} else if (checkType.equals("string")) {
