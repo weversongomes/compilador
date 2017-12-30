@@ -25,7 +25,7 @@ public class EscopoClasse extends Escopo {
 	}
 	
 	public void showSimbols() {
-		System.out.println("SIMBOLOS ESCOPO CLASSE");
+		System.out.println("SIMBOLOS ESCOPO CLASSE " + name);
 		for (Symbol s : symbols) {
 			System.out.println(s.name + " - " + s.value + " - " + s.type + " - " + s.isConstant);
 		}
@@ -60,4 +60,13 @@ public class EscopoClasse extends Escopo {
 	public ArrayList<Symbol> getSimbols() {
 		return this.symbols;
 	}
+	
+	public boolean equals(Object obj) {
+		System.out.println("EQUALS ESCOPO CLASSE");
+		EscopoClasse escopo = (EscopoClasse) obj;
+		String name = escopo.name;
+        if (name.equals(this.name))
+        	return true;
+        return false;
+    }
 }

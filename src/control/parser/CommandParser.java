@@ -1,6 +1,7 @@
 package control.parser;
 
 import model.Escopo;
+import model.EscopoClasse;
 import model.EscopoMetodo;
 import model.SemanticAnalyzer;
 import model.Symbol;
@@ -461,9 +462,14 @@ public class CommandParser {
 	
 	// reconhece o acesso a atributos e metodos de outras classes
 	public boolean recognizeAccess() {
+		String objName = parser.getTokensList().get(parser.index - 1).lexeme;
+		Symbol symbol = SemanticAnalyzer.getSymbol(objName, escopo);
+		if (symbol == null) {
+			System.out.println("ERRO SEMANTICO: Acesso a objeto não declarado na linha " + parser.getTokensList().get(parser.index - 1).line);
+		}
 		while (parser.tokensToRead() && parser.getTokensList().get(parser.index).lexeme.equals(":")) {
 			parser.index = parser.index + 1;
-			if (!recognizeObjectAccess()) {
+			if (!recognizeObjectAccess(symbol)) {
 				return false;
 			}
 		}
@@ -471,8 +477,27 @@ public class CommandParser {
 	}
 	
 	// reconhece o conteudo de acesso a atributos e metodos de objetos
-	public boolean recognizeObjectAccess() {
+	public boolean recognizeObjectAccess(Symbol symbol) {
 		if (parser.tokensToRead() && parser.getTokensList().get(parser.index).type.equals("ID")) {
+			try {
+				Symbol symbolClass = SemanticAnalyzer.getSymbol(symbol.type, parser.eg);
+				EscopoClasse auxEscopo1 = null;
+				for (Escopo auxEscopo2 : parser.escopos) {
+					if (auxEscopo2.name.equals(symbolClass.name)) {
+						auxEscopo1 = (EscopoClasse) auxEscopo2;
+						break;
+					}
+				}
+				Symbol auxSymbol = new Symbol();
+				auxSymbol.name = parser.getTokensList().get(parser.index).lexeme;
+				if (!auxEscopo1.getSimbols().contains(auxSymbol)) {
+					System.out.println("ERRO SEMANTICO: Acesso a atributo ou método inexistente na linha " + parser.getTokensList().get(parser.index).line);
+				}
+			} catch (Exception e) {
+				System.out.println("ERRO SEMANTICO: Acesso a objeto de tipo desconhecido na linha " + parser.getTokensList().get(parser.index).line);
+				//e.printStackTrace();
+			}
+			
 			parser.index = parser.index + 1;
 			if (parser.tokensToRead() && parser.getTokensList().get(parser.index).lexeme.equals("(")) {
 				parser.index = parser.index + 1;

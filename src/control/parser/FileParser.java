@@ -59,6 +59,7 @@ public class FileParser {
 	public boolean recognizeClass() {
 		boolean isCorrect = true;
 		int classIndex = 0;
+		String className = "";
 		Symbol childClass = null, parentClass = null;
 		while (classIndex < classStructure.length) {
 			if (tokensToRead()) {
@@ -66,6 +67,7 @@ public class FileParser {
 					if (!tokensList.get(index).type.equals("ID")) {
 						isCorrect = false;
 					}
+					className = tokensList.get(index).lexeme;
 					childClass = new Symbol();
 					childClass.name = getTokensList().get(index).lexeme;
 					childClass.type = "class";
@@ -88,7 +90,7 @@ public class FileParser {
 									if (parentClass.hasParent == true) {
 										System.out.println("ERRO SEMANTICO: Existe heranca em cadeia na linha " + getTokensList().get(index).line);
 									} else {
-										System.out.println("HERANÇA CORRETA NA LINHA " + getTokensList().get(index).line);
+										System.out.println("HERANCA CORRETA NA LINHA " + getTokensList().get(index).line);
 									}
 									eg.setSymbolParent(childClass); // indica que esta classe eh filha de uma classe pai
 								}
@@ -106,6 +108,7 @@ public class FileParser {
 				} else if (classIndex == 3) { // verifica se os comandos estao corretos
 					EscopoClasse ec = new EscopoClasse();
 					ec.setEscopoPai(eg);
+					ec.name = className;
 					escopos.add(ec);
 					if (tokensList.get(index).lexeme.equals("}")) { // se for um um "}" eh porque nao ha nenhum comando dentro da classe
 						classIndex++;

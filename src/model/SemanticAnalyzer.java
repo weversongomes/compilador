@@ -289,4 +289,27 @@ public class SemanticAnalyzer {
 		}
 		return "ok";
 	}
+	
+	public static Symbol getSymbol(String simbolName, Escopo escopo) {
+		Symbol symbol = new Symbol();
+		symbol.name = simbolName;
+		if (escopo.getSimbols().contains(symbol)) {
+			symbol = escopo.getSimbols().get(escopo.getSimbols().indexOf(symbol));
+		} else {
+			try {
+				if (escopo.getEscopoPai().getSimbols().contains(symbol)) {
+					symbol = escopo.getEscopoPai().getSimbols().get(escopo.getEscopoPai().getSimbols().indexOf(symbol));
+				} else {
+					if (escopo.getEscopoPai().getEscopoPai().getSimbols().contains(symbol)) {
+						symbol = escopo.getEscopoPai().getEscopoPai().getSimbols().get(escopo.getEscopoPai().getEscopoPai().getSimbols().indexOf(symbol));
+					} else {
+						return null;
+					}
+				}
+			} catch (Exception e) {
+				return null;
+			}
+		}
+		return symbol;
+	}
 }

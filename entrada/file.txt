@@ -16,6 +16,7 @@ class ClasseX : ClasseY {}
 class Classe2 : ClasseX {}
 
 class Classe1 : Classe2 {
+	Classe1 objeto1;
 	string s1;
 	s1 = 5.5;
 	string[4] s2;
@@ -72,7 +73,7 @@ class Classe1 : Classe2 {
 			print("Teste", a);
 			scan(a, x, y, b);
 		} else {
-			acesso1:acesso2:acesso3:acesso4(x):acesso5(x, y):acesso6():acesso7(x, y, z, a, b, c);
+			objeto1:objeto1:objeto1:doSomething();
 		}
 		<:a:>
 	}
