@@ -72,8 +72,15 @@ public class CommandParser {
 				if (!new VariableParser(parser).recognizeInitialization(false, varType, escopo)) { // verifica se a atribuicao esta correta
 					panicModeLocalVariableInitialization();
 				} else {
-					if (SemanticAnalyzer.checkType(attrVar, parser.getTokensList().get(parser.index).lexeme, escopo).equals("ok")) {
+					String checkType = SemanticAnalyzer.checkType(attrVar, parser.getTokensList().get(parser.index).lexeme, escopo);
+					if (checkType.equals("ok")) {
 						System.out.println("tipo compativel na linha " + parser.getTokensList().get(parser.index).line);
+					} else if (checkType.equals("string")) {
+						if (parser.getTokensList().get(parser.index).type.equals("STR")) {
+							System.out.println("string compativel na linha " + parser.getTokensList().get(parser.index).line);
+						} else {
+							System.out.println("string incompativel na linha " + parser.getTokensList().get(parser.index).line);
+						}
 					} else {
 						System.out.println("tipo incompativel na linha " + parser.getTokensList().get(parser.index).line);
 					}

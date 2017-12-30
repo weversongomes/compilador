@@ -45,17 +45,24 @@ public class ClassParser {
 				if (!new VariableParser(fileParser).recognizeInitialization(false, varType, ec)) { // verifica se a atribuicao esta correta
 					panicModeAttributeInitialization();
 				} else {
-					if (SemanticAnalyzer.checkType(attrVar, fileParser.getTokensList().get(fileParser.index).lexeme, ec).equals("ok")) {
+					String checkType = SemanticAnalyzer.checkType(attrVar, fileParser.getTokensList().get(fileParser.index).lexeme, ec);
+					if (checkType.equals("ok")) {
 						System.out.println("tipo compativel na linha " + fileParser.getTokensList().get(fileParser.index).line);
-						fileParser.index = fileParser.index + 1;
-						if (fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index).lexeme.equals(";")) { // inicializacao
-							System.out.println("Inicializacao de atributo correta na linha " + fileParser.getTokensList().get(fileParser.index).line);
-							return true;
+					} else if (checkType.equals("string")) {
+						if (fileParser.getTokensList().get(fileParser.index).type.equals("STR")) {
+							System.out.println("string compativel na linha " + fileParser.getTokensList().get(fileParser.index).line);
 						} else {
-							panicModeAttributeInitialization();
+							System.out.println("string incompativel na linha " + fileParser.getTokensList().get(fileParser.index).line);
 						}
 					} else {
 						System.out.println("tipo incompativel na linha " + fileParser.getTokensList().get(fileParser.index).line);
+					}
+					fileParser.index = fileParser.index + 1;
+					if (fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index).lexeme.equals(";")) { // inicializacao
+						System.out.println("Inicializacao de atributo correta na linha " + fileParser.getTokensList().get(fileParser.index).line);
+						return true;
+					} else {
+						panicModeAttributeInitialization();
 					}
 				}
 			} else { // declaracao de atributo ou metodo

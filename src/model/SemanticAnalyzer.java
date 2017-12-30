@@ -27,7 +27,9 @@ public class SemanticAnalyzer {
 				}
 			}
 		}
-		if (isBool(value)) { // verifica se eh um bool atribuido corretamente 
+		if (varType[0].equals("string")) {
+				return "string";
+		} else if (isBool(value)) { // verifica se eh um bool atribuido corretamente 
 			if (varType[0].equals("bool")) {
 				return "ok";
 			}
@@ -37,10 +39,6 @@ public class SemanticAnalyzer {
 			}
 		} else if (isFloat(value)) { // verifica se eh um float atribuido corretamente
 			if (varType[0].equals("float")) {
-				return "ok";
-			}
-		} else if (isString(value)) { // verifica se eh uma string atribuido corretamente
-			if (symbol.type.equals("string")) {
 				return "ok";
 			}
 		}

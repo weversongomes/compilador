@@ -132,8 +132,15 @@ public class FileParser {
 				if (!new VariableParser(this).recognizeInitialization(false, varType, eg)) { // verifica se a atribuicao esta correta
 					panicModeGlobalVariableInitialization();
 				} else {
-					if (SemanticAnalyzer.checkType(attrVar, tokensList.get(index).lexeme, eg).equals("ok")) {
+					String checkType = SemanticAnalyzer.checkType(attrVar, tokensList.get(index).lexeme, eg);
+					if (checkType.equals("ok")) {
 						System.out.println("tipo compativel na linha " + tokensList.get(index).line);
+					} else if (checkType.equals("string")) {
+						if (tokensList.get(index).type.equals("STR")) {
+							System.out.println("string compativel na linha " + tokensList.get(index).line);
+						} else {
+							System.out.println("string incompativel na linha " + tokensList.get(index).line);
+						}
 					} else {
 						System.out.println("tipo incompativel na linha " + tokensList.get(index).line);
 					}
