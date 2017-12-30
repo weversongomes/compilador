@@ -15,7 +15,7 @@ public class SemanticAnalyzer {
 			symbol = escopo.getSimbols().get(escopo.getSimbols().indexOf(symbol));
 			varType = splitVectorVariable(symbol.type);
 			if (update) {
-				escopo.setSimbolValue(simbolName, value);
+				escopo.setSimbolValue(varName[0], value);
 			}
 		} else {
 			try {
@@ -23,14 +23,14 @@ public class SemanticAnalyzer {
 					symbol = escopo.getEscopoPai().getSimbols().get(escopo.getEscopoPai().getSimbols().indexOf(symbol));
 					varType = splitVectorVariable(symbol.type);
 					if (update) {
-						escopo.getEscopoPai().setSimbolValue(simbolName, value);
+						escopo.getEscopoPai().setSimbolValue(varName[0], value);
 					}
 				} else {
 					if (escopo.getEscopoPai().getEscopoPai().getSimbols().contains(symbol)) {
 						symbol = escopo.getEscopoPai().getEscopoPai().getSimbols().get(escopo.getEscopoPai().getEscopoPai().getSimbols().indexOf(symbol));
 						varType = splitVectorVariable(symbol.type);
 						if (update) {
-							escopo.getEscopoPai().getEscopoPai().setSimbolValue(simbolName, value);
+							escopo.getEscopoPai().getEscopoPai().setSimbolValue(varName[0], value);
 						}
 					} else {
 						return "err1";
