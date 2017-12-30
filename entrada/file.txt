@@ -48,6 +48,8 @@ class Classe1 : Classe2 {
 		
 		for (x=1; x<20 && x!=10; x=x+1) {
 			print("Teste");
+			a=90;
+			y=91;
 			scan(x);	
 		}
 		if (x < 20 && x > 30) {

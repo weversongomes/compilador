@@ -1,6 +1,7 @@
 package control.parser;
 
 import model.Escopo;
+import model.SemanticAnalyzer;
 import model.Symbol;
 
 /**
@@ -72,8 +73,15 @@ public class VariableParser {
 						symbol.name = simbolName;
 						symbol.type = varType;
 						symbol.isConstant = true;
-						symbol.value = fileParser.getTokensList().get(fileParser.index).lexeme;
 						escopo.addSimbol(symbol);
+						String value = fileParser.getTokensList().get(fileParser.index).lexeme;
+						if (SemanticAnalyzer.checkType(simbolName, value, escopo, false).equals("ok")) {
+							symbol.value = value;
+							return true;
+						} else {
+							System.out.println("ERRO SEMANTICO: Tipos incompativeis na linha " + fileParser.getTokensList().get(fileParser.index).line);
+						}
+						//
 						//String simbolValue = fileParser.getTokensList().get(fileParser.index).lexeme;
 						//fileParser.eg.setSimbolValue(simbolName, simbolValue);
 					}

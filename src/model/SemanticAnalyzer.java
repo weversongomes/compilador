@@ -40,9 +40,9 @@ public class SemanticAnalyzer {
 				System.out.println("ESCOPO PAI NAO EXISTE");
 				return "err1";
 			}
-			
-			
 		}
+		//System.out.println(varName[0]);
+		//System.out.println(varType[0]);
 		if (varType.length > 1 || varName.length > 1) { // caso seja um vetor, verifica se as regras semanticas foram aplicadas
 			if (varName.length != varType.length) {
 				System.out.println("As dimensoes do vetor na declaracao sao diferentes da atribuicao");
