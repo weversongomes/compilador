@@ -18,6 +18,7 @@ public class MethodParser {
 	private String[] methodReturnStructure = {"<", ":", "<return>", ":", ">"};
 	EscopoClasse escopoPai;
 	public EscopoMetodo em;
+	String varMethodReturn;
 	
 	public MethodParser(FileParser parser, EscopoClasse escopo) {
 		this.escopoPai = escopo;
@@ -152,6 +153,7 @@ public class MethodParser {
 					if (!parser.getTokensList().get(parser.index).type.equals("ID")) {
 						isCorrect = false;
 					}
+					varMethodReturn = parser.getTokensList().get(parser.index).lexeme;
 					methodReturnIndex++;
 					parser.index = parser.index + 1;
 				} else {

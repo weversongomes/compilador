@@ -134,7 +134,7 @@ public class FileParser {
 				if (!new VariableParser(this).recognizeInitialization(false, varType, eg)) { // verifica se a atribuicao esta correta
 					panicModeGlobalVariableInitialization();
 				} else {
-					String checkType = SemanticAnalyzer.checkType(attrVar, tokensList.get(index).lexeme, eg, true);
+					String checkType = SemanticAnalyzer.checkType(attrVar, tokensList.get(index).lexeme, eg, true, "");
 					if (checkType.equals("ok")) {
 						System.out.println("tipo compativel na linha " + tokensList.get(index).line);
 					} else if (checkType.equals("string")) {

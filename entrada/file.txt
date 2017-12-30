@@ -62,7 +62,7 @@ class Classe1 : Classe2 {
 		} else {
 			acesso1:acesso2:acesso3:acesso4(x):acesso5(x, y):acesso6():acesso7(x, y, z, a, b, c);
 		}
-		<:z:>
+		<:a:>
 	}
 	
 	int doSomething () {
@@ -71,11 +71,11 @@ class Classe1 : Classe2 {
 	
 	bool main() {
 		bool l;
-		l = 30;
+		l = true;
 		String cSequence;
 		cSequence = "cadeia de caracteres";
 		doSomething(cSequence, l);
-		<:ret:>
+		<:l:>
 	}
 }
 
