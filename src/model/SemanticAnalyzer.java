@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 public class SemanticAnalyzer {
 
 	
-	public static String checkType(String simbolName, String value, Escopo escopo, boolean update) {
+	public static String checkType(String simbolName, String value, Escopo escopo, boolean update, String type) {
 		Symbol symbol = new Symbol();
 		//symbol.name = simbolName;
 		String[] varName = splitVectorVariable(simbolName);
@@ -41,8 +41,6 @@ public class SemanticAnalyzer {
 				return "err1";
 			}
 		}
-		//System.out.println(varName[0]);
-		//System.out.println(varType[0]);
 		if (varType.length > 1 || varName.length > 1) { // caso seja um vetor, verifica se as regras semanticas foram aplicadas
 			if (varName.length != varType.length) {
 				System.out.println("As dimensoes do vetor na declaracao sao diferentes da atribuicao");
@@ -55,19 +53,19 @@ public class SemanticAnalyzer {
 		}
 	    if (varType[0].equals("string")) { 
 	        return "string"; 
-	    } else if (isBool(value)) { // verifica se eh um bool atribuido corretamente 
+	    } else if (isBool(value) || type.equals("bool")) { // verifica se eh um bool atribuido corretamente 
 			if (varType[0].equals("bool")) {
 				return "ok";
 			}
-		} else if (isInt(value)) { // verifica se eh um int atribuido corretamente
+		} else if (isInt(value) || type.equals("int")) { // verifica se eh um int atribuido corretamente
 			if (varType[0].equals("int")) {
 				return "ok";
 			}
-		} else if (isFloat(value)) { // verifica se eh um float atribuido corretamente
+		} else if (isFloat(value) || type.equals("float")) { // verifica se eh um float atribuido corretamente
 			if (varType[0].equals("float")) {
 				return "ok";
 			}
-		} else if (isString(value)) { // verifica se eh uma string atribuido corretamente
+		} else if (isString(value) || type.equals("string")) { // verifica se eh uma string atribuido corretamente
 			if (symbol.type.equals("string")) {
 				return "ok";
 			}

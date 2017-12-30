@@ -75,7 +75,7 @@ public class VariableParser {
 						symbol.isConstant = true;
 						escopo.addSimbol(symbol);
 						String value = fileParser.getTokensList().get(fileParser.index).lexeme;
-						if (SemanticAnalyzer.checkType(simbolName, value, escopo, false).equals("ok")) {
+						if (SemanticAnalyzer.checkType(simbolName, value, escopo, false, "").equals("ok")) {
 							symbol.value = value;
 							return true;
 						} else {

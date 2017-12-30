@@ -45,7 +45,7 @@ public class ClassParser {
 				if (!new VariableParser(fileParser).recognizeInitialization(false, varType, ec)) { // verifica se a atribuicao esta correta
 					panicModeAttributeInitialization();
 				} else {
-					String checkType = SemanticAnalyzer.checkType(attrVar, fileParser.getTokensList().get(fileParser.index).lexeme, ec, true);
+					String checkType = SemanticAnalyzer.checkType(attrVar, fileParser.getTokensList().get(fileParser.index).lexeme, ec, true, "");
 					if (checkType.equals("ok")) {
 						System.out.println("tipo compativel na linha " + fileParser.getTokensList().get(fileParser.index).line);
 					} else if (checkType.equals("string")) {
@@ -84,6 +84,14 @@ public class ClassParser {
 						if (ec.addSimbol(symbol) == 0) {
 							System.out.println("ERRO SEMANTICO: Identificador duplicado na linha " + fileParser.getTokensList().get(fileParser.index).line);
 						}
+						
+						String checkType = SemanticAnalyzer.checkType(mParser.varMethodReturn, "", mParser.em, false, "bool");
+						if (checkType.equals("ok")) {
+							System.out.println("SEMANTICO: Retorno compativel na linha " + fileParser.getTokensList().get(fileParser.index - 1).line);
+						} else {
+							System.out.println("ERRO SEMANTICO: Retorno incompativel na linha " + fileParser.getTokensList().get(fileParser.index - 1).line);
+						}
+						
 						System.out.println("Main correta na linha " + fileParser.getTokensList().get(fileParser.index).line);
 						return true;
 					}
@@ -97,6 +105,14 @@ public class ClassParser {
 						if (!mParser.recognizeMethod(varType)) {
 							panicModeMethod();
 						} else {
+							
+							String checkType = SemanticAnalyzer.checkType(mParser.varMethodReturn, "", mParser.em, false, varType);
+							if (checkType.equals("ok")) {
+								System.out.println("SEMANTICO: Retorno compativel na linha " + fileParser.getTokensList().get(fileParser.index - 1).line);
+							} else {
+								System.out.println("ERRO SEMANTICO: Retorno incompativel na linha " + fileParser.getTokensList().get(fileParser.index - 1).line);
+							}
+							
 							System.out.println("Metodo correto na linha " + fileParser.getTokensList().get(fileParser.index).line);
 							//mParser.em.showSimbols();
 							return true;
