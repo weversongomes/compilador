@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.regex.Pattern;
 
 public class SemanticAnalyzer {
@@ -254,6 +255,38 @@ public class SemanticAnalyzer {
 			e.printStackTrace();
 			return "ERRO SEMANTICO: Chamada imcompativel de metodo na linha " + line;
 		}
-		return "SEMATINCO: Chamada de metodo semanticamente correta na linha " + line;
+		return "SEMANTICO: Chamada de metodo semanticamente correta na linha " + line;
+	}
+	
+	public static String checkArithmeticOperation(ArrayList<String> operators, Escopo scope, int line) {
+		String varType = ""; // tipo de variavel do primeiro identificador encontrado na operacao aritmetica
+		for (int i = 0; i < operators.size(); i++) { // percorre os tokens de uma operacao aritmetica 
+			if (isInt(operators.get(i)) || isFloat(operators.get(i))) { // se for um numero
+				String numType = isInt(operators.get(i)) ? "int" : "float";
+				if (varType.equals("")) { // se eh a primeira variavel da operacao aritmetica, nao ha tipo a ser comparado ainda
+					varType = numType;
+				} else {
+					if (!numType.equals(varType)) { // compara com o tipo da primeira variavel da operacao aritmetica
+						return "ERRO SEMANTICO: Variaveis com tipos diferentes na operacao aritmetica da linha " + line;
+					}
+				}
+			} else { // se for um identificador
+				Symbol s = new Symbol();
+				s.name = operators.get(i);
+				if (scope.getSimbols().contains(s)) { // verifica se existe a variavel
+					s = scope.getSimbols().get(scope.getSimbols().indexOf(s));
+					if (varType.equals("")) { // se eh a primeira variavel da operacao aritmetica, nao ha tipo a ser comparado ainda
+						varType = s.type;
+					} else {
+						if (!s.type.equals(varType)) { // compara com o tipo da primeira variavel da operacao aritmetica
+							return "ERRO SEMANTICO: Variaveis com tipos diferentes na operacao aritmetica da linha " + line;
+						}
+					}
+				} else { // nao existe a variavel da operacao aritmetica
+					return "ERRO SEMANTICO: Nao existe uma variavel da operacao aritmetica na linha " + line;
+				}
+			}
+		}
+		return "ok";
 	}
 }

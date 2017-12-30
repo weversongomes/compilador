@@ -90,21 +90,21 @@ public class CommandParser {
 						
 						System.out.println("Atribuicao de variavel local correta na linha " + parser.getTokensList().get(parser.index).line);
 						return true;
-/*					} else if (parser.tokensToRead() && parser.getTokensList().get(parser.index).type.equals("ARIOP")) { // inicializacao com operacao aritmetica
+					} else if (parser.tokensToRead() && parser.getTokensList().get(parser.index).type.equals("ARIOP")) { // inicializacao com operacao aritmetica
 						parser.index = parser.index + 1;
-						if (parser.tokensToRead() && new OperationParser(parser, escopo).recognizeArithmeticOperation()) {
+						if (parser.tokensToRead() && new OperationParser(parser, escopo).recognizeArithmeticOperation(parser.getTokensList().get(parser.index - 4).lexeme, parser.getTokensList().get(parser.index - 2).lexeme)) {
 							System.out.println("Inicializacao de variavel local com operacao aritmetica correta na linha " + parser.getTokensList().get(parser.index).line);
 							return true;
 						} else {
 							panicModeLocalVariableInitialization();
-						}*/
+						}
 					} else {
 						panicModeLocalVariableInitialization();
 					}
 				}
 			} else if (parser.tokensToRead() && parser.getTokensList().get(parser.index).type.equals("ARIOP")) { // operacao aritmetica
 				parser.index = parser.index + 1;
-				if (parser.tokensToRead() && new OperationParser(parser, escopo).recognizeArithmeticOperation()) {
+				if (parser.tokensToRead() && new OperationParser(parser, escopo).recognizeArithmeticOperation("", "")) {
 					System.out.println("Operacao aritmetica correta na linha " + parser.getTokensList().get(parser.index).line);
 					return true;
 				} else {
@@ -203,7 +203,7 @@ public class CommandParser {
 			parser.index = parser.index + 1;
 			if (parser.tokensToRead() && parser.getTokensList().get(parser.index).lexeme.equals("=")) {
 				parser.index = parser.index + 1;
-				if (parser.tokensToRead() && new OperationParser(parser, escopo).recognizeArithmeticOperation()) {
+				if (parser.tokensToRead() && new OperationParser(parser, escopo).recognizeArithmeticOperation(parser.getTokensList().get(parser.index - 2).lexeme ,"")) {
 					return true;
 				}
 			}

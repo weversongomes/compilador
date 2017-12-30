@@ -167,14 +167,14 @@ public class FileParser {
 					if (tokensToRead() && tokensList.get(index).lexeme.equals(";")) { // inicializacao
 						System.out.println("Inicializacao de variavel global correta na linha " + tokensList.get(index).line);
 						return true;
-/*					} else if (tokensToRead() && tokensList.get(index).type.equals("ARIOP")) { // inicializacao com operacao aritmetica
+					} else if (tokensToRead() && tokensList.get(index).type.equals("ARIOP")) { // inicializacao com operacao aritmetica
 						index++;
-						if (tokensToRead() && new OperationParser(this).recognizeArithmeticOperation()) {
+						if (tokensToRead() && new OperationParser(this, eg).recognizeArithmeticOperation(tokensList.get(index - 4).lexeme, tokensList.get(index - 2).lexeme)) {
 							System.out.println("Inicializacao de variavel global com operacao aritmetica correta na linha " + tokensList.get(index).line);
 							return true;
 						} else {
 							panicModeGlobalVariableInitialization();
-						}*/
+						}
 					} else {
 						panicModeGlobalVariableInitialization();
 					}

@@ -61,6 +61,15 @@ public class ClassParser {
 					if (fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index).lexeme.equals(";")) { // inicializacao
 						System.out.println("Inicializacao de atributo correta na linha " + fileParser.getTokensList().get(fileParser.index).line);
 						return true;
+					} else if (fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index).type.equals("ARIOP")) { // inicializacao com operacao aritmetica
+						fileParser.index = fileParser.index + 1;
+						if (fileParser.tokensToRead() && new OperationParser(fileParser, ec).recognizeArithmeticOperation(fileParser.getTokensList().get(fileParser.index - 4).lexeme, fileParser.getTokensList().get(fileParser.index - 2).lexeme)) {
+							System.out.println("Inicializacao de atributo com operacao aritmetica correta na linha " 
+									+ fileParser.getTokensList().get(fileParser.index).line);
+							return true;
+						} else {
+							panicModeAttributeInitialization();
+						}
 					} else {
 						panicModeAttributeInitialization();
 					}
