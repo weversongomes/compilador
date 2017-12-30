@@ -56,8 +56,9 @@ class Classe1 : Classe2 {
 	}
 	
 	bool main() {
-		int l;
+		bool l;
 		l = 30;
+		String cSequence;
 		cSequence = "cadeia de caracteres";
 		doSomething(cSequence, l);
 		<:ret:>

@@ -15,7 +15,24 @@ public class SemanticAnalyzer {
 			symbol = escopo.getSimbols().get(escopo.getSimbols().indexOf(symbol));
 			varType = splitVectorVariable(symbol.type);
 		} else {
-			return "err1";
+			try {
+				if (escopo.getEscopoPai().getSimbols().contains(symbol)) {
+					symbol = escopo.getEscopoPai().getSimbols().get(escopo.getEscopoPai().getSimbols().indexOf(symbol));
+					varType = splitVectorVariable(symbol.type);
+				} else {
+					if (escopo.getEscopoPai().getEscopoPai().getSimbols().contains(symbol)) {
+						symbol = escopo.getEscopoPai().getEscopoPai().getSimbols().get(escopo.getEscopoPai().getEscopoPai().getSimbols().indexOf(symbol));
+						varType = splitVectorVariable(symbol.type);
+					} else {
+						return "err1";
+					}
+				}
+			} catch (Exception e) {
+				System.out.println("ESCOPO PAI NAO EXISTE");
+				return "err1";
+			}
+			
+			
 		}
 		if (varType.length > 1 || varName.length > 1) { // caso seja um vetor, verifica se as regras semanticas foram aplicadas
 			if (varName.length != varType.length) {

@@ -6,6 +6,7 @@ public class Escopo {
 	public String type;
 	private ArrayList<Symbol> symbols;
 	public String name = "";
+	Escopo escopoPai;
 	
 	public Escopo() {
 		symbols = new ArrayList<Symbol>();
@@ -20,6 +21,10 @@ public class Escopo {
 
 	public ArrayList<Symbol> getSimbols() {
 		return this.symbols;
+	}
+	
+	public Escopo getEscopoPai() {
+		return escopoPai;
 	}
 
 	/**
