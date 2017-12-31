@@ -1,7 +1,9 @@
+final int x = 10;
 int a, b, c;
 a = 2;
 b = 3;
 c = a + b;
+float fgh;
 
 class ClasseY {
 	float x, y, z;
@@ -9,7 +11,6 @@ class ClasseY {
 	y = 3.5;
 	z = x * y;
 	string test;
-	test = "cadeia de caracteres";
 }
 
 class Classe1 : ClasseY {
@@ -19,8 +20,8 @@ class Classe1 : ClasseY {
 	bool varX;
 	varX = false;
 	int[3][4] aaaa, bbbb;
-	float[50] ffff;
-	ffff[20] = 5.2;
+	float[1] ffff;
+	ffff[0] = 5.2;
 	final float k = 9.5;
 	int doSomething (string xxx, bool yyy) {
 		int p, q, r;
@@ -78,4 +79,4 @@ class Classe1 : ClasseY {
 	}
 }
 
-class Classe3 { }
+class Classe3 {}

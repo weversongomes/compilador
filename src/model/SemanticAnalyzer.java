@@ -6,7 +6,8 @@ import java.util.regex.Pattern;
 public class SemanticAnalyzer {
 
 	
-	public static String checkType(String simbolName, String value, Escopo escopo, boolean update, String type) {
+	public static String[] checkType(String simbolName, String value, Escopo escopo, boolean update, String type) {
+		String[] returnMessages = {"", "ok"};
 		Symbol symbol = new Symbol();
 		//symbol.name = simbolName;
 		String[] varName = splitVectorVariable(simbolName);
@@ -34,44 +35,51 @@ public class SemanticAnalyzer {
 							escopo.getEscopoPai().getEscopoPai().setSimbolValue(varName[0], value);
 						}
 					} else {
-						return "err1";
+						//return "err1";
+						returnMessages[0] = "erro";
 					}
 				}
 			} catch (Exception e) {
 				//System.out.println("ESCOPO PAI NAO EXISTE");
-				return "err1";
+				//return "err1";
+				returnMessages[0] = "erro";
 			}
 		}
 		if (varType.length > 1 || varName.length > 1) { // caso seja um vetor, verifica se as regras semanticas foram aplicadas
 			if (varName.length != varType.length) {
-				System.out.println("As dimensoes do vetor na declaracao sao diferentes da atribuicao");
+				System.out.println();
+				returnMessages[1] = "ERRO SEMANTICO: As dimensoes do vetor na declaracao sao diferentes da atribuicao";
 			} else { 
 				String vector = checkVector(varName, varType);
-				if (!vector.equals("ok")) { // caso o vetor nao esteja semanticamente correto, exibe a mensagem de erro
-					System.out.println(vector);
-				}
+				returnMessages[1] = vector;
 			}
 		}
 	    if (varType[0].equals("string")) { 
-	        return "string"; 
+	        //return "string"; 
+	        returnMessages[0] = "string";
 	    } else if (isBool(value) || type.equals("bool")) { // verifica se eh um bool atribuido corretamente 
 			if (varType[0].equals("bool")) {
-				return "ok";
+				//return "ok";
+				returnMessages[0] = "ok";
 			}
 		} else if (isInt(value) || type.equals("int")) { // verifica se eh um int atribuido corretamente
 			if (varType[0].equals("int")) {
-				return "ok";
+				//return "ok";
+				returnMessages[0] = "ok";
 			}
 		} else if (isFloat(value) || type.equals("float")) { // verifica se eh um float atribuido corretamente
 			if (varType[0].equals("float")) {
-				return "ok";
+				//return "ok";
+				returnMessages[0] = "ok";
 			}
 		} else if (isString(value) || type.equals("string")) { // verifica se eh uma string atribuido corretamente
 			if (symbol.type.equals("string")) {
-				return "ok";
+				//return "ok";
+				returnMessages[0] = "ok";
 			}
 		}
-		return "err2";
+		//return "err2";
+	    return returnMessages;
 	}
 	
 	public static String checkRelationalOperation(String[] values, Escopo scope) {	
@@ -123,15 +131,15 @@ public class SemanticAnalyzer {
 			String typeArrayPos = varType[i];
 			typeArrayPos = typeArrayPos.substring(1, typeArrayPos.length() - 1);
 			if (!isInt(varArrayPos) || !isInt(typeArrayPos)) { // nao permite que o vetor tenha dimensao float, por ex: vetor[4.5]
-				return "ERRO SEMANTICO: O vetor tem dimensoes improprias na linha ";
+				return "ERRO SEMANTICO: O vetor tem dimensoes improprias";
 			} else {
 				int dimensaoInicializacao = Integer.parseInt(varArrayPos);
 				int dimensaoDeclaracao = Integer.parseInt(typeArrayPos);
 				if (dimensaoDeclaracao < 1) { // nao permite que o vetor tenha dimensao < 1, por ex: vetor[-1]
-					return "ERRO SEMANTICO: O vetor deve conter pelo menos 1 posicao na linha ";
+					return "ERRO SEMANTICO: O vetor deve conter pelo menos 1 posicao";
 				}
 				if (dimensaoInicializacao >= dimensaoDeclaracao || dimensaoInicializacao < 0) { // verifica se o indice extrapolou
-					return "ERRO SEMANTICO: Indice inexistente no vetor na linha ";
+					return "ERRO SEMANTICO: Indice inexistente no vetor";
 				}
 			}
 		}

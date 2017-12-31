@@ -76,10 +76,10 @@ public class CommandParser {
 					parser.index = parser.index + 1;
 					if (parser.tokensToRead() && parser.getTokensList().get(parser.index).lexeme.equals(";")) { // inicializacao
 						//System.out.println("Atribuicao de variavel local correta na linha " + parser.getTokensList().get(parser.index).line);
-						String checkType = SemanticAnalyzer.checkType(attrVar, parser.getTokensList().get(parser.index-1).lexeme, escopo, true, "");
-						if (checkType.equals("ok")) {
+						String[] checkType = SemanticAnalyzer.checkType(attrVar, parser.getTokensList().get(parser.index-1).lexeme, escopo, true, "");
+						if (checkType[0].equals("ok")) {
 							//System.out.println("tipo compativel na linha " + parser.getTokensList().get(parser.index).line);
-						} else if (checkType.equals("string")) {
+						} else if (checkType[0].equals("string")) {
 							if (parser.getTokensList().get(parser.index-1).type.equals("STR")) {
 								//System.out.println("string compativel na linha " + parser.getTokensList().get(parser.index).line);
 							} else {
@@ -87,6 +87,10 @@ public class CommandParser {
 							}
 						} else {
 							parser.addSemanticError("ERRO SEMANTICO: Tipo incompativel ou inexistente na linha " + parser.getTokensList().get(parser.index-1).line);
+						}
+						
+						if (!checkType[1].equals("ok")) {
+							parser.addSemanticError(checkType[1] + " na linha " + parser.getTokensList().get(parser.index-1).line);
 						}
 						return true;
 					} else if (parser.tokensToRead() && parser.getTokensList().get(parser.index).type.equals("ARIOP")) { // inicializacao com operacao aritmetica

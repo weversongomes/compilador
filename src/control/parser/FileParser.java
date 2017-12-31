@@ -159,10 +159,10 @@ public class FileParser {
 					index++;
 					if (tokensToRead() && tokensList.get(index).lexeme.equals(";")) { // inicializacao
 						//System.out.println("Inicializacao de variavel global correta na linha " + tokensList.get(index).line);
-						String checkType = SemanticAnalyzer.checkType(attrVar, tokensList.get(index-1).lexeme, eg, true, "");
-						if (checkType.equals("ok")) {
+						String[] checkType = SemanticAnalyzer.checkType(attrVar, tokensList.get(index-1).lexeme, eg, true, "");
+						if (checkType[0].equals("ok")) {
 							//System.out.println("tipo compativel na linha " + tokensList.get(index).line);
-						} else if (checkType.equals("string")) {
+						} else if (checkType[0].equals("string")) {
 							if (tokensList.get(index-1).type.equals("STR")) {
 								//System.out.println("string compativel na linha " + tokensList.get(index).line);
 							} else {
@@ -170,6 +170,10 @@ public class FileParser {
 							}
 						} else {
 							semanticErrors.add("ERRO SEMANTICO: Tipo incompativel ou inexistente na linha " + tokensList.get(index-1).line);
+						}
+						
+						if (!checkType[1].equals("ok")) {
+							semanticErrors.add(checkType[1] + " na linha " + tokensList.get(index-1).line);
 						}
 						return true;
 					} else if (tokensToRead() && tokensList.get(index).type.equals("ARIOP")) { // inicializacao com operacao aritmetica
