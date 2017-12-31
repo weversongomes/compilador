@@ -42,10 +42,10 @@ public class EscopoGlobal extends Escopo {
 	}
 	
 	public void showSimbols() {
-		System.out.println("SIMBOLOS ESCOPO GLOBAL");
+/*		System.out.println("SIMBOLOS ESCOPO GLOBAL");
 		for (Symbol s : symbols) {
 			System.out.println(s.name + " - " + s.value + " - " + s.type + " - " + s.isConstant);
-		}
+		}*/
 	}
 	
 	public ArrayList<Symbol> getSimbols() {
@@ -57,7 +57,7 @@ public class EscopoGlobal extends Escopo {
 			symbol = symbols.get(symbols.indexOf(symbol));
 			symbol.hasParent = true;
 		} else {
-			System.out.println("----- OBJETO NAO ENCONTRADO");
+			System.out.println("OBJETO NAO ENCONTRADO");
 		}
 	}
 	

@@ -32,28 +32,28 @@ public class CommandParser {
 			if (!recognizeTokenFor()) {
 				panicModeFor();
 			} else {
-				System.out.println("For correto na linha " + parser.getTokensList().get(parser.index).line);
+				//System.out.println("For correto na linha " + parser.getTokensList().get(parser.index).line);
 				return true;
 			}
 		} else if (parser.getTokensList().get(parser.index).lexeme.equals("if")) { // comando if
 			if (!recognizeTokenIf()) {
 				panicModeIf();
 			} else {
-				System.out.println("If correto na linha " + parser.getTokensList().get(parser.index).line);
+				//System.out.println("If correto na linha " + parser.getTokensList().get(parser.index).line);
 				return true;
 			}
 		} else if (parser.getTokensList().get(parser.index).lexeme.equals("print")) { // comando print
 			if (!recognizeTokenPrint()) {
 				panicModePrint();
 			} else {
-				System.out.println("Print correto na linha " + parser.getTokensList().get(parser.index).line);
+				//System.out.println("Print correto na linha " + parser.getTokensList().get(parser.index).line);
 				return true;
 			}
 		} else if (parser.getTokensList().get(parser.index).lexeme.equals("scan")) { // comando scan
 			if (!recognizeTokenScan()) {
 				panicModeScan();
 			} else {
-				System.out.println("Scan correto na linha " + parser.getTokensList().get(parser.index).line);
+				//System.out.println("Scan correto na linha " + parser.getTokensList().get(parser.index).line);
 				return true;
 			}
 		} else if (parser.isAttributeType() || parser.getTokensList().get(parser.index).type.equals("ID")) { // inicializacao
@@ -75,26 +75,26 @@ public class CommandParser {
 				} else {
 					String checkType = SemanticAnalyzer.checkType(attrVar, parser.getTokensList().get(parser.index).lexeme, escopo, true, "");
 					if (checkType.equals("ok")) {
-						System.out.println("tipo compativel na linha " + parser.getTokensList().get(parser.index).line);
+						//System.out.println("tipo compativel na linha " + parser.getTokensList().get(parser.index).line);
 					} else if (checkType.equals("string")) {
 						if (parser.getTokensList().get(parser.index).type.equals("STR")) {
-							System.out.println("string compativel na linha " + parser.getTokensList().get(parser.index).line);
+							//System.out.println("string compativel na linha " + parser.getTokensList().get(parser.index).line);
 						} else {
-							System.out.println("ERRO SEMANTICO: string incompativel na linha " + parser.getTokensList().get(parser.index).line);
+							parser.addSemanticError("ERRO SEMANTICO: Tipo incompativel ou inexistente na linha " + parser.getTokensList().get(parser.index).line);
 						}
 					} else {
-						System.out.println("ERRO SEMANTICO: Tipo incompativel na linha " + parser.getTokensList().get(parser.index).line);
+						parser.addSemanticError("ERRO SEMANTICO: Tipo incompativel ou inexistente na linha " + parser.getTokensList().get(parser.index).line);
 					}
 					
 					parser.index = parser.index + 1;
 					if (parser.tokensToRead() && parser.getTokensList().get(parser.index).lexeme.equals(";")) { // inicializacao
 						
-						System.out.println("Atribuicao de variavel local correta na linha " + parser.getTokensList().get(parser.index).line);
+						//System.out.println("Atribuicao de variavel local correta na linha " + parser.getTokensList().get(parser.index).line);
 						return true;
 					} else if (parser.tokensToRead() && parser.getTokensList().get(parser.index).type.equals("ARIOP")) { // inicializacao com operacao aritmetica
 						parser.index = parser.index + 1;
 						if (parser.tokensToRead() && new OperationParser(parser, escopo).recognizeArithmeticOperation(parser.getTokensList().get(parser.index - 4).lexeme, parser.getTokensList().get(parser.index - 2).lexeme)) {
-							System.out.println("Inicializacao de variavel local com operacao aritmetica correta na linha " + parser.getTokensList().get(parser.index).line);
+							//System.out.println("Inicializacao de variavel local com operacao aritmetica correta na linha " + parser.getTokensList().get(parser.index).line);
 							return true;
 						} else {
 							panicModeLocalVariableInitialization();
@@ -106,7 +106,7 @@ public class CommandParser {
 			} else if (parser.tokensToRead() && parser.getTokensList().get(parser.index).type.equals("ARIOP")) { // operacao aritmetica
 				parser.index = parser.index + 1;
 				if (parser.tokensToRead() && new OperationParser(parser, escopo).recognizeArithmeticOperation("", "")) {
-					System.out.println("Operacao aritmetica correta na linha " + parser.getTokensList().get(parser.index).line);
+					//System.out.println("Operacao aritmetica correta na linha " + parser.getTokensList().get(parser.index).line);
 					return true;
 				} else {
 					new OperationParser(parser, escopo).panicModeArithmeticOperation();
@@ -114,14 +114,14 @@ public class CommandParser {
 			
 			} else if (parser.tokensToRead() && parser.getTokensList().get(parser.index).lexeme.equals(":")) { // acesso a metodos ou atributos de objetos
 				if (recognizeAccess()) {
-					System.out.println("Acesso correto na linha " + parser.getTokensList().get(parser.index).line);
+					//System.out.println("Acesso correto na linha " + parser.getTokensList().get(parser.index).line);
 					return true;
 				} else {
 					panicModeAccess();
 				} 	
 			} else if (parser.tokensToRead() && parser.getTokensList().get(parser.index).lexeme.equals("(")) { // chamada a outro metodo da classe
 				if (recognizeMethodCall(attrVar)) {
-					System.out.println("Chamada a metodo correta na linha " + parser.getTokensList().get(parser.index).line);
+					//System.out.println("Chamada a metodo correta na linha " + parser.getTokensList().get(parser.index).line);
 					return true;
 				} else {
 					panicModeMethodCall();
@@ -136,7 +136,7 @@ public class CommandParser {
 						if (!new VariableParser(parser).recognizeVariableDeclaration(varType, escopo, false)) {
 							panicModeLocalVariableDeclaration();
 						} else {
-							System.out.println("Declaracao de variavel local correta na linha " + parser.getTokensList().get(parser.index).line);
+							//System.out.println("Declaracao de variavel local correta na linha " + parser.getTokensList().get(parser.index).line);
 							return true;
 						}
 					} else {
@@ -410,7 +410,10 @@ public class CommandParser {
 					EscopoMetodo escopoMetodoReferenciado = new EscopoMetodo();
 					escopoMetodoReferenciado.name = methodName;
 					escopoMetodoReferenciado = (EscopoMetodo) parser.escopos.get(parser.escopos.indexOf(escopoMetodoReferenciado));
-					System.out.println(SemanticAnalyzer.validateMethodParams(param, escopo, escopoMetodoReferenciado, indexParam, parser.getTokensList().get(parser.index).line));
+					String message = SemanticAnalyzer.validateMethodParams(param, escopo, escopoMetodoReferenciado, indexParam, parser.getTokensList().get(parser.index).line);
+					if (!message.equals("ok")) {
+						parser.addSemanticError(message);
+					}
 					indexParam++;
 					//--------------------------
 					isFirstVariable = false; // se tiver proxima leitura, nao sera mais a primeira
@@ -430,7 +433,10 @@ public class CommandParser {
 					EscopoMetodo escopoMetodoReferenciado = new EscopoMetodo();
 					escopoMetodoReferenciado.name = methodName;
 					escopoMetodoReferenciado = (EscopoMetodo) parser.escopos.get(parser.escopos.indexOf(escopoMetodoReferenciado));
-					System.out.println(SemanticAnalyzer.validateMethodParams(param, escopo, escopoMetodoReferenciado, indexParam, parser.getTokensList().get(parser.index).line));
+					String message = SemanticAnalyzer.validateMethodParams(param, escopo, escopoMetodoReferenciado, indexParam, parser.getTokensList().get(parser.index).line);
+					if (!message.equals("ok")) {
+						parser.addSemanticError(message);
+					}
 					indexParam++;
 					//--------------------------
 					parser.index = parser.index + 1;
@@ -465,7 +471,7 @@ public class CommandParser {
 		String objName = parser.getTokensList().get(parser.index - 1).lexeme;
 		Symbol symbol = SemanticAnalyzer.getSymbol(objName, escopo);
 		if (symbol == null) {
-			System.out.println("ERRO SEMANTICO: Acesso a objeto não declarado na linha " + parser.getTokensList().get(parser.index - 1).line);
+			parser.addSemanticError("ERRO SEMANTICO: Acesso a objeto nao declarado na linha " + parser.getTokensList().get(parser.index - 1).line);
 		}
 		while (parser.tokensToRead() && parser.getTokensList().get(parser.index).lexeme.equals(":")) {
 			parser.index = parser.index + 1;
@@ -491,10 +497,10 @@ public class CommandParser {
 				Symbol auxSymbol = new Symbol();
 				auxSymbol.name = parser.getTokensList().get(parser.index).lexeme;
 				if (!auxEscopo1.getSimbols().contains(auxSymbol)) {
-					System.out.println("ERRO SEMANTICO: Acesso a atributo ou método inexistente na linha " + parser.getTokensList().get(parser.index).line);
+					parser.addSemanticError("ERRO SEMANTICO: Acesso a atributo ou metodo inexistente na linha " + parser.getTokensList().get(parser.index).line);
 				}
 			} catch (Exception e) {
-				System.out.println("ERRO SEMANTICO: Acesso a objeto de tipo desconhecido na linha " + parser.getTokensList().get(parser.index).line);
+				parser.addSemanticError("ERRO SEMANTICO: Acesso a objeto de tipo desconhecido na linha " + parser.getTokensList().get(parser.index).line);
 				//e.printStackTrace();
 			}
 			

@@ -43,9 +43,9 @@ public class OperationParser {
 			if (parser.tokensToRead() && parser.getTokensList().get(parser.index).type.equals("DEL")) {
 				String message = SemanticAnalyzer.checkArithmeticOperation(operators, escopo, parser.getTokensList().get(parser.index).line);
 				if (message.equals("ok")) {
-					System.out.println("Operacao aritmetica semanticamente correta apos a atribuicao");
+					//System.out.println("Operacao aritmetica semanticamente correta apos a atribuicao");
 				} else {
-					System.out.println(message);
+					parser.addSemanticError(message);
 				}
 				return true;
 			}
@@ -77,9 +77,9 @@ public class OperationParser {
 						parser.getTokensList().get(parser.index).lexeme.equals("true") || parser.getTokensList().get(parser.index).lexeme.equals("false")) {
 					relOp[2] = parser.getTokensList().get(parser.index).lexeme;
 					if (SemanticAnalyzer.checkRelationalOperation(relOp, escopo).equals("ok")) {
-						System.out.println("Operacao relacional semanticamente correta");
+						//System.out.println("Operacao relacional semanticamente correta");
 					} else {
-						System.out.println("Operacao relacional semanticamente incorreta");
+						parser.addSemanticError("ERRO SEMANTICO: Operacao relacional semanticamente incorreta");
 					}
 					if (parser.getTokensList().get(parser.index + 1).lexeme.equals(";") || parser.getTokensList().get(parser.index + 1).lexeme.equals(")")) {
 						return true;

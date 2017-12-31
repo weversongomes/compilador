@@ -22,10 +22,12 @@ public class FileParser {
 	private String[] classStructure = {"class", "<name>", "{", "<content>", "}"}; // estrutura sintatica de uma classe
 	public ArrayList<Escopo> escopos;
 	EscopoGlobal eg;
+	private ArrayList<String> semanticErrors;
 	
 	public FileParser(ArrayList<Token> tokensList) {
 		this.tokensList = tokensList;
 		errorsList = new ArrayList<String>();
+		semanticErrors = new ArrayList<String>();
 		eg = new EscopoGlobal();
 		escopos = new ArrayList<>();
 		escopos.add(eg);
@@ -38,7 +40,7 @@ public class FileParser {
 				if (!recognizeClass()) {
 					panicModeClass();
 				} else {
-					System.out.println("Classe correta na linha " + tokensList.get(index).line);
+					//System.out.println("Classe correta na linha " + tokensList.get(index).line);
 				}
 			} else { // declaracao de variavel global
 				if (tokensList.get(index).lexeme.equals("final")) { // pode ser constante
@@ -72,7 +74,7 @@ public class FileParser {
 					childClass.name = getTokensList().get(index).lexeme;
 					childClass.type = "class";
 					if (eg.addSimbol(childClass) == 0) {
-						System.out.println("ERRO SEMANTICO: Identificador duplicado na linha " + getTokensList().get(index).line);
+						semanticErrors.add("ERRO SEMANTICO: Identificador duplicado na linha " + getTokensList().get(index).line);
 					}
 					classIndex++;
 					index++;
@@ -85,17 +87,17 @@ public class FileParser {
 							parentClass = eg.getSymbol(getTokensList().get(index).lexeme);
 							if (parentClass != null) {
 								if (!eg.getSimbols().contains(parentClass)) {
-									System.out.println("ERRO SEMANTICO: Classe pai da heranca nao existe na linha " + getTokensList().get(index).line);
+									semanticErrors.add("ERRO SEMANTICO: Classe pai da heranca nao existe na linha " + getTokensList().get(index).line);
 								} else {
 									if (parentClass.hasParent == true) {
-										System.out.println("ERRO SEMANTICO: Existe heranca em cadeia na linha " + getTokensList().get(index).line);
+										semanticErrors.add("ERRO SEMANTICO: Existe heranca em cadeia na linha " + getTokensList().get(index).line);
 									} else {
-										System.out.println("HERANCA CORRETA NA LINHA " + getTokensList().get(index).line);
+										//System.out.println("HERANCA CORRETA NA LINHA " + getTokensList().get(index).line);
 									}
 									eg.setSymbolParent(childClass); // indica que esta classe eh filha de uma classe pai
 								}
 							} else {
-								System.out.println("ERRO SEMANTICO: Classe pai da heranca nao existe na linha " + getTokensList().get(index).line);
+								semanticErrors.add("ERRO SEMANTICO: Classe pai da heranca nao existe na linha " + getTokensList().get(index).line);
 							}
 						}
 					} else if (!tokensList.get(index).lexeme.equals("{")) {
@@ -156,24 +158,24 @@ public class FileParser {
 				} else {
 					String checkType = SemanticAnalyzer.checkType(attrVar, tokensList.get(index).lexeme, eg, true, "");
 					if (checkType.equals("ok")) {
-						System.out.println("tipo compativel na linha " + tokensList.get(index).line);
+						//System.out.println("tipo compativel na linha " + tokensList.get(index).line);
 					} else if (checkType.equals("string")) {
 						if (tokensList.get(index).type.equals("STR")) {
-							System.out.println("string compativel na linha " + tokensList.get(index).line);
+							//System.out.println("string compativel na linha " + tokensList.get(index).line);
 						} else {
-							System.out.println("string incompativel na linha " + tokensList.get(index).line);
+							semanticErrors.add("ERRO SEMANTICO: Tipo incompativel ou inexistente na linha " + tokensList.get(index).line);
 						}
 					} else {
-						System.out.println("tipo incompativel na linha " + tokensList.get(index).line);
+						semanticErrors.add("ERRO SEMANTICO: Tipo incompativel ou inexistente na linha " + tokensList.get(index).line);
 					}
 					index++;
 					if (tokensToRead() && tokensList.get(index).lexeme.equals(";")) { // inicializacao
-						System.out.println("Inicializacao de variavel global correta na linha " + tokensList.get(index).line);
+						//System.out.println("Inicializacao de variavel global correta na linha " + tokensList.get(index).line);
 						return true;
 					} else if (tokensToRead() && tokensList.get(index).type.equals("ARIOP")) { // inicializacao com operacao aritmetica
 						index++;
 						if (tokensToRead() && new OperationParser(this, eg).recognizeArithmeticOperation(tokensList.get(index - 4).lexeme, tokensList.get(index - 2).lexeme)) {
-							System.out.println("Inicializacao de variavel global com operacao aritmetica correta na linha " + tokensList.get(index).line);
+							//System.out.println("Inicializacao de variavel global com operacao aritmetica correta na linha " + tokensList.get(index).line);
 							return true;
 						} else {
 							panicModeGlobalVariableInitialization();
@@ -199,7 +201,7 @@ public class FileParser {
 					if (!new VariableParser(this).recognizeVariableDeclaration(varType, eg, false)) {
 						panicModeGlobalVariableDeclaration();
 					} else {
-						System.out.println("Declaracao de variavel local correta na linha " + tokensList.get(index).line);
+						//System.out.println("Declaracao de variavel local correta na linha " + tokensList.get(index).line);
 						return true;
 					}
 				} else if (tokensToRead() && tokensList.get(index).lexeme.equals("=") && isConstant) { // constante
@@ -210,7 +212,7 @@ public class FileParser {
 						index++;
 						
 						if (tokensToRead() && tokensList.get(index).lexeme.equals(";")) {
-							System.out.println("Declaracao de constante correta na linha " + tokensList.get(index).line);
+							//System.out.println("Declaracao de constante correta na linha " + tokensList.get(index).line);
 							return true;
 						}
 					}
@@ -244,6 +246,14 @@ public class FileParser {
 	
 	public void addError(String message) {
 		errorsList.add(message);
+	}
+	
+	public ArrayList<String> getSemanticErrorsList() {
+		return semanticErrors;
+	}
+	
+	public void addSemanticError(String message) {
+		semanticErrors.add(message);
 	}
 	
 	public boolean isAttributeType() {

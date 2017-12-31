@@ -28,7 +28,7 @@ public class VariableParser {
 					symbol.type = varType;
 					symbol.isConstant = isConstant;
 					if (escopo.addSimbol(symbol) == 0) {
-						System.out.println("ERRO SEMANTICO: Identificador duplicado na linha " + fileParser.getTokensList().get(fileParser.index).line);
+						fileParser.addSemanticError("ERRO SEMANTICO: Identificador duplicado na linha " + fileParser.getTokensList().get(fileParser.index).line);
 					}
 					fileParser.index = fileParser.index + 1;
 					isFirstVariable = false;
@@ -79,7 +79,7 @@ public class VariableParser {
 							symbol.value = value;
 							return true;
 						} else {
-							System.out.println("ERRO SEMANTICO: Tipos incompativeis na linha " + fileParser.getTokensList().get(fileParser.index).line);
+							fileParser.addSemanticError("ERRO SEMANTICO: Tipos incompativeis ou inexistentes na linha " + fileParser.getTokensList().get(fileParser.index).line);
 						}
 						//
 						//String simbolValue = fileParser.getTokensList().get(fileParser.index).lexeme;

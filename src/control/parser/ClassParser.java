@@ -47,25 +47,25 @@ public class ClassParser {
 				} else {
 					String checkType = SemanticAnalyzer.checkType(attrVar, fileParser.getTokensList().get(fileParser.index).lexeme, ec, true, "");
 					if (checkType.equals("ok")) {
-						System.out.println("tipo compativel na linha " + fileParser.getTokensList().get(fileParser.index).line);
+						//System.out.println("tipo compativel na linha " + fileParser.getTokensList().get(fileParser.index).line);
 					} else if (checkType.equals("string")) {
 						if (fileParser.getTokensList().get(fileParser.index).type.equals("STR")) {
-							System.out.println("string compativel na linha " + fileParser.getTokensList().get(fileParser.index).line);
+							//System.out.println("string compativel na linha " + fileParser.getTokensList().get(fileParser.index).line);
 						} else {
-							System.out.println("string incompativel na linha " + fileParser.getTokensList().get(fileParser.index).line);
+							fileParser.addSemanticError("ERRO SEMANTICO: Tipo incompativel ou inexistente na linha " + fileParser.getTokensList().get(fileParser.index).line);
 						}
 					} else {
-						System.out.println("tipo incompativel na linha " + fileParser.getTokensList().get(fileParser.index).line);
+						fileParser.addSemanticError("ERRO SEMANTICO: Tipo incompativel ou inexistente na linha " + fileParser.getTokensList().get(fileParser.index).line);
 					}
 					fileParser.index = fileParser.index + 1;
 					if (fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index).lexeme.equals(";")) { // inicializacao
-						System.out.println("Inicializacao de atributo correta na linha " + fileParser.getTokensList().get(fileParser.index).line);
+						//System.out.println("Inicializacao de atributo correta na linha " + fileParser.getTokensList().get(fileParser.index).line);
 						return true;
 					} else if (fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index).type.equals("ARIOP")) { // inicializacao com operacao aritmetica
 						fileParser.index = fileParser.index + 1;
 						if (fileParser.tokensToRead() && new OperationParser(fileParser, ec).recognizeArithmeticOperation(fileParser.getTokensList().get(fileParser.index - 4).lexeme, fileParser.getTokensList().get(fileParser.index - 2).lexeme)) {
-							System.out.println("Inicializacao de atributo com operacao aritmetica correta na linha " 
-									+ fileParser.getTokensList().get(fileParser.index).line);
+							//System.out.println("Inicializacao de atributo com operacao aritmetica correta na linha " 
+								//	+ fileParser.getTokensList().get(fileParser.index).line);
 							return true;
 						} else {
 							panicModeAttributeInitialization();
@@ -91,17 +91,17 @@ public class ClassParser {
 						symbol.value = "bool";
 						symbol.isConstant = isFinal;
 						if (ec.addSimbol(symbol) == 0) {
-							System.out.println("ERRO SEMANTICO: Identificador duplicado na linha " + fileParser.getTokensList().get(fileParser.index).line);
+							fileParser.addSemanticError("ERRO SEMANTICO: Identificador duplicado na linha " + fileParser.getTokensList().get(fileParser.index).line);
 						}
 						
 						String checkType = SemanticAnalyzer.checkType(mParser.varMethodReturn, "", mParser.em, false, "bool");
 						if (checkType.equals("ok")) {
-							System.out.println("SEMANTICO: Retorno compativel na linha " + fileParser.getTokensList().get(fileParser.index - 1).line);
+							//System.out.println("SEMANTICO: Retorno compativel na linha " + fileParser.getTokensList().get(fileParser.index - 1).line);
 						} else {
-							System.out.println("ERRO SEMANTICO: Retorno incompativel na linha " + fileParser.getTokensList().get(fileParser.index - 1).line);
+							fileParser.addSemanticError("ERRO SEMANTICO: Retorno incompativel ou inexistente na linha " + fileParser.getTokensList().get(fileParser.index - 1).line);
 						}
 						
-						System.out.println("Main correta na linha " + fileParser.getTokensList().get(fileParser.index).line);
+						//System.out.println("Main correta na linha " + fileParser.getTokensList().get(fileParser.index).line);
 						return true;
 					}
 				} else if (fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index).type.equals("ID")) {
@@ -117,12 +117,12 @@ public class ClassParser {
 							
 							String checkType = SemanticAnalyzer.checkType(mParser.varMethodReturn, "", mParser.em, false, varType);
 							if (checkType.equals("ok")) {
-								System.out.println("SEMANTICO: Retorno compativel na linha " + fileParser.getTokensList().get(fileParser.index - 1).line);
+								//System.out.println("SEMANTICO: Retorno compativel na linha " + fileParser.getTokensList().get(fileParser.index - 1).line);
 							} else {
-								System.out.println("ERRO SEMANTICO: Retorno incompativel na linha " + fileParser.getTokensList().get(fileParser.index - 1).line);
+								fileParser.addSemanticError("ERRO SEMANTICO: Retorno incompativel ou inexistente na linha " + fileParser.getTokensList().get(fileParser.index - 1).line);
 							}
 							
-							System.out.println("Metodo correto na linha " + fileParser.getTokensList().get(fileParser.index).line);
+							//System.out.println("Metodo correto na linha " + fileParser.getTokensList().get(fileParser.index).line);
 							//mParser.em.showSimbols();
 							return true;
 						}
@@ -133,7 +133,7 @@ public class ClassParser {
 						if (!new VariableParser(fileParser).recognizeVariableDeclaration(varType, ec, isFinal)) {
 							panicModeAttributeDeclaration();
 						} else {
-							System.out.println("Declaracao de atributo correta na linha " + fileParser.getTokensList().get(fileParser.index).line);
+							//System.out.println("Declaracao de atributo correta na linha " + fileParser.getTokensList().get(fileParser.index).line);
 							return true;
 						}
 					} else if (isFinal == true && fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index).lexeme.equals("=")) { // constante
@@ -143,7 +143,7 @@ public class ClassParser {
 						} else {
 							fileParser.index = fileParser.index + 1;
 							if (fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index).lexeme.equals(";")) {
-								System.out.println("Declaracao de constante correta na linha " + fileParser.getTokensList().get(fileParser.index).line);
+								//System.out.println("Declaracao de constante correta na linha " + fileParser.getTokensList().get(fileParser.index).line);
 								//fileParser.index = fileParser.index + 1;
 								return true;
 							}

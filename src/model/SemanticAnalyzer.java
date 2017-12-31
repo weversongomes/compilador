@@ -38,7 +38,7 @@ public class SemanticAnalyzer {
 					}
 				}
 			} catch (Exception e) {
-				System.out.println("ESCOPO PAI NAO EXISTE");
+				//System.out.println("ESCOPO PAI NAO EXISTE");
 				return "err1";
 			}
 		}
@@ -123,19 +123,19 @@ public class SemanticAnalyzer {
 			String typeArrayPos = varType[i];
 			typeArrayPos = typeArrayPos.substring(1, typeArrayPos.length() - 1);
 			if (!isInt(varArrayPos) || !isInt(typeArrayPos)) { // nao permite que o vetor tenha dimensao float, por ex: vetor[4.5]
-				return "O vetor tem dimensoes improprias";
+				return "ERRO SEMANTICO: O vetor tem dimensoes improprias na linha ";
 			} else {
 				int dimensaoInicializacao = Integer.parseInt(varArrayPos);
 				int dimensaoDeclaracao = Integer.parseInt(typeArrayPos);
 				if (dimensaoDeclaracao < 1) { // nao permite que o vetor tenha dimensao < 1, por ex: vetor[-1]
-					return "O vetor deve conter pelo menos 1 posicao";
+					return "ERRO SEMANTICO: O vetor deve conter pelo menos 1 posicao na linha ";
 				}
 				if (dimensaoInicializacao >= dimensaoDeclaracao || dimensaoInicializacao < 0) { // verifica se o indice extrapolou
-					return "Indice inexistente no vetor";
+					return "ERRO SEMANTICO: Indice inexistente no vetor na linha ";
 				}
 			}
 		}
-		System.out.println("Vetor ou matriz ok");
+		//System.out.println("Vetor ou matriz ok");
 		return "ok";
 	}
 	
@@ -255,7 +255,7 @@ public class SemanticAnalyzer {
 			e.printStackTrace();
 			return "ERRO SEMANTICO: Chamada imcompativel de metodo na linha " + line;
 		}
-		return "SEMANTICO: Chamada de metodo semanticamente correta na linha " + line;
+		return "ok";
 	}
 	
 	public static String checkArithmeticOperation(ArrayList<String> operators, Escopo scope, int line) {

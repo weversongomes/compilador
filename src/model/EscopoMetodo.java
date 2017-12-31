@@ -101,13 +101,13 @@ public class EscopoMetodo extends Escopo {
 	}
 
 	public void showSimbols() {
-		System.out.println("PARAMS ESCOPO METODO");
+/*		System.out.println("PARAMS ESCOPO METODO");
 		for (String s : params) {
 			System.out.println(s);
 		}
 		System.out.println("SIMBOLOS ESCOPO METODO");
 		for (Symbol s : symbols) {
 			System.out.println(s.name + " - " + s.value + " - " + s.type + " - " + s.isConstant);
-		}
+		}*/
 	}
 }

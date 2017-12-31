@@ -49,7 +49,7 @@ public class MethodParser {
 					}
 					symbol.name = parser.getTokensList().get(parser.index).lexeme;
 					if (escopoPai.addSimbol(symbol) == 0) {
-						System.out.println("ERRO SEMANTICO: Identificador de metodo duplicado na linha " + parser.getTokensList().get(parser.index).line);
+						parser.addSemanticError("ERRO SEMANTICO: Identificador de metodo duplicado na linha " + parser.getTokensList().get(parser.index).line);
 					}
 					methodIndex++;
 					parser.index = parser.index + 1;
@@ -214,9 +214,9 @@ public class MethodParser {
 						parser.index = parser.index + 1;
 					} else {
 						if (!parser.hasMain()) {
-							System.out.println("Correto. Apenas um metodo main existente ate aqui");
+							//System.out.println("Correto. Apenas um metodo main existente ate aqui");
 						} else {
-							System.out.println("Ja existe um metodo main no codigo");
+							parser.addSemanticError("ERRO SEMANTICO: Ja existe um metodo main no codigo");
 						}
 					}
 					mainIndex++;
