@@ -48,7 +48,7 @@ public class Parser {
 			bw.write("Codigo semanticamente correto");
 		} else {
 			for (int i = 0; i < errorsList.size(); i++) {
-				System.out.println(errorsList.get(i));
+				//System.out.println(errorsList.get(i));
 				bw.write(errorsList.get(i) + "\n");
 			}
 		}

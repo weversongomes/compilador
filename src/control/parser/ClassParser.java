@@ -45,20 +45,20 @@ public class ClassParser {
 				if (!new VariableParser(fileParser).recognizeInitialization(false, varType, ec)) { // verifica se a atribuicao esta correta
 					panicModeAttributeInitialization();
 				} else {
-					String checkType = SemanticAnalyzer.checkType(attrVar, fileParser.getTokensList().get(fileParser.index).lexeme, ec, true, "");
-					if (checkType.equals("ok")) {
-						//System.out.println("tipo compativel na linha " + fileParser.getTokensList().get(fileParser.index).line);
-					} else if (checkType.equals("string")) {
-						if (fileParser.getTokensList().get(fileParser.index).type.equals("STR")) {
-							//System.out.println("string compativel na linha " + fileParser.getTokensList().get(fileParser.index).line);
-						} else {
-							fileParser.addSemanticError("ERRO SEMANTICO: Tipo incompativel ou inexistente na linha " + fileParser.getTokensList().get(fileParser.index).line);
-						}
-					} else {
-						fileParser.addSemanticError("ERRO SEMANTICO: Tipo incompativel ou inexistente na linha " + fileParser.getTokensList().get(fileParser.index).line);
-					}
 					fileParser.index = fileParser.index + 1;
 					if (fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index).lexeme.equals(";")) { // inicializacao
+						String checkType = SemanticAnalyzer.checkType(attrVar, fileParser.getTokensList().get(fileParser.index-1).lexeme, ec, true, "");
+						if (checkType.equals("ok")) {
+							//System.out.println("tipo compativel na linha " + fileParser.getTokensList().get(fileParser.index).line);
+						} else if (checkType.equals("string")) {
+							if (fileParser.getTokensList().get(fileParser.index-1).type.equals("STR")) {
+								//System.out.println("string compativel na linha " + fileParser.getTokensList().get(fileParser.index).line);
+							} else {
+								fileParser.addSemanticError("ERRO SEMANTICO: Tipo incompativel ou inexistente na linha " + fileParser.getTokensList().get(fileParser.index-1).line);
+							}
+						} else {
+							fileParser.addSemanticError("ERRO SEMANTICO: Tipo incompativel ou inexistente na linha " + fileParser.getTokensList().get(fileParser.index-1).line);
+						}
 						//System.out.println("Inicializacao de atributo correta na linha " + fileParser.getTokensList().get(fileParser.index).line);
 						return true;
 					} else if (fileParser.tokensToRead() && fileParser.getTokensList().get(fileParser.index).type.equals("ARIOP")) { // inicializacao com operacao aritmetica

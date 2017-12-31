@@ -156,21 +156,21 @@ public class FileParser {
 				if (!new VariableParser(this).recognizeInitialization(false, varType, eg)) { // verifica se a atribuicao esta correta
 					panicModeGlobalVariableInitialization();
 				} else {
-					String checkType = SemanticAnalyzer.checkType(attrVar, tokensList.get(index).lexeme, eg, true, "");
-					if (checkType.equals("ok")) {
-						//System.out.println("tipo compativel na linha " + tokensList.get(index).line);
-					} else if (checkType.equals("string")) {
-						if (tokensList.get(index).type.equals("STR")) {
-							//System.out.println("string compativel na linha " + tokensList.get(index).line);
-						} else {
-							semanticErrors.add("ERRO SEMANTICO: Tipo incompativel ou inexistente na linha " + tokensList.get(index).line);
-						}
-					} else {
-						semanticErrors.add("ERRO SEMANTICO: Tipo incompativel ou inexistente na linha " + tokensList.get(index).line);
-					}
 					index++;
 					if (tokensToRead() && tokensList.get(index).lexeme.equals(";")) { // inicializacao
 						//System.out.println("Inicializacao de variavel global correta na linha " + tokensList.get(index).line);
+						String checkType = SemanticAnalyzer.checkType(attrVar, tokensList.get(index-1).lexeme, eg, true, "");
+						if (checkType.equals("ok")) {
+							//System.out.println("tipo compativel na linha " + tokensList.get(index).line);
+						} else if (checkType.equals("string")) {
+							if (tokensList.get(index-1).type.equals("STR")) {
+								//System.out.println("string compativel na linha " + tokensList.get(index).line);
+							} else {
+								semanticErrors.add("ERRO SEMANTICO: Tipo incompativel ou inexistente na linha " + tokensList.get(index-1).line);
+							}
+						} else {
+							semanticErrors.add("ERRO SEMANTICO: Tipo incompativel ou inexistente na linha " + tokensList.get(index-1).line);
+						}
 						return true;
 					} else if (tokensToRead() && tokensList.get(index).type.equals("ARIOP")) { // inicializacao com operacao aritmetica
 						index++;

@@ -1,2 +1,1 @@
-ERRO SEMANTICO: Tipo incompativel ou inexistente na linha 5
-ERRO SEMANTICO: Tipo incompativel ou inexistente na linha 24
+Codigo semanticamente correto
